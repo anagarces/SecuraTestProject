@@ -1,0 +1,1 @@
+ALTER TABLE contenidos DROP COLUMN url_imagen;

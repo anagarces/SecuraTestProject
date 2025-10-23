@@ -1,0 +1,64 @@
+<!---INICIO CABECERA DE CONTENIDOS-->
+<div class="hero-header">
+  <div class="hero-content">
+    <h2 class="text-4xl font-bold">Contenidos</h2>
+    <p class="mb-6 text-lg font-normal lg:text-xl">Explora nuestro catálogo de ciberseguridad, tu centro de mando para el conocimiento digital. Cada tarjeta es una puerta de acceso a un tema crucial. Navega, descubre y profundiza en las áreas que más te interesan para fortalecer tus habilidades y anticiparte a las amenazas del mañana.</p>
+  </div>
+</div>
+<!---FIN CABECERA DE CONTENIDOS-->
+
+<!---INICIO CATALOGO DE CONTENIDOS-->
+<ng-container *ngIf="!isLoading; else loading">
+
+  <div *ngIf="todosLosContenidos.length === 0" class="text-center text-gray-500 dark:text-gray-400">
+    <p>No hay contenido disponible en este momento.</p>
+  </div>
+
+  <div *ngIf="todosLosContenidos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!--CARD INDIVIDUAL-->
+    <div *ngFor="let item of cardsAMostrar">
+      <div class="max-w-sm h-full flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <a [routerLink]="['/contenido', item.idContenido]">
+           <!---<img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" /> --> 
+        </a>
+        <div class="p-5 flex flex-col flex-grow">
+          <a [routerLink]="['/contenido', item.idContenido]">
+            <h2 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{{ item.titulo }}</h2>
+          </a>
+          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 line-clamp-3"> {{ item.cuerpo }}</p>
+          <a [routerLink]="['/contenido', item.idContenido]" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-auto self-start">
+            Leer más
+            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!---FIN CATALOGO DE CONTENIDOS-->
+
+<br><br>
+<!---INICIO PAGINACION DE CONTENIDO-->
+  <div *ngIf="todosLosContenidos.length > cardsPorPagina" class="flex justify-center items-center gap-4 mt-8">
+      <button (click)="irAPaginaAnterior()" [disabled]="paginaActual === 1" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
+          Anterior
+      </button>
+
+      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          Página {{ paginaActual }} de {{ totalPaginas() }}
+      </span>
+      
+      <button (click)="irAPaginaSiguiente()" [disabled]="paginaActual === totalPaginas()" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
+          Siguiente
+      </button>
+  </div>
+</ng-container>
+<!---FIN PAGINACION DE CONTENIDOS-->
+
+<ng-template #loading>
+  <div class="text-center text-gray-500 dark:text-gray-400">
+    <p>Cargando contenido...</p>
+  </div>
+</ng-template>

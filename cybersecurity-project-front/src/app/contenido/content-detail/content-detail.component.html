@@ -1,0 +1,29 @@
+<div class="my-6">
+  <button (click)="volver()" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700">
+    &laquo; Volver a la lista
+  </button>
+</div>
+
+<ng-container *ngIf="contenido$ | async as contenido; else loadingOrError">
+
+  <article *ngIf="contenido">
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white lg:text-5xl">{{ contenido.titulo }}</h1>
+    
+    <div class="prose lg:prose-xl dark:prose-invert max-w-full">
+      <p class="texto-con-formato">{{ contenido.cuerpo }}</p>
+    </div>
+  </article>
+
+</ng-container>
+
+<ng-template #loadingOrError>
+  <div *ngIf="errorOcurrido; else loading" class="text-center text-red-500">
+    <h2 class="text-2xl font-bold">Error</h2>
+    <p>No se pudo cargar el contenido. Es posible que el ID no exista o haya un problema con el servidor.</p>
+  </div>
+  <ng-template #loading>
+    <div class="text-center text-gray-500 dark:text-gray-400">
+      <p>Cargando contenido...</p>
+    </div>
+  </ng-template>
+</ng-template>

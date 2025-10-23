@@ -1,0 +1,117 @@
+/*
+
+footer{
+    box-sizing: border-box;
+    background-color: #F5EDED;
+    color: black;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+}
+
+footer p{
+    padding: 5px;
+    margin-top: 10px;
+}
+*/
+
+/*titulo de la barra de navegacion
+
+.app-title {
+  color: white;
+  text-decoration: none;
+  margin: 30px;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+*/
+
+
+/*contenedor del menu
+.nav-menu {
+  background-color: #6482AD;
+  height: 100px;
+*/
+
+
+   /* --- Esenciales para que la barra quede fija ---
+     position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+   
+   */
+
+
+
+/*contenedor de barra de navegacion
+
+.bar-nav-container {
+  color: white;
+  margin-right: 100px;
+  display: flex;
+  flex-wrap: wrap;
+}
+*/
+
+/*
+.toolbar-spacer {
+  flex: 1 1 auto; /* Esto es fundamental para empujar los elementos que le siguen a la derecha */
+
+
+/*contenido principal
+main{
+    flex-grow: 1;
+}
+*/
+
+
+
+/*contenedor del router-outlet
+.page-container {
+  margin-top: 100px;
+  position: relative; 
+  flex-grow: 1;
+}
+
+*/
+
+
+/*mobile
+
+@media (max-width: 600px) {
+  .button-nav {
+    margin: 6px 6px;
+    padding: 10px;
+  }
+
+  .nav-menu {
+    height: 150px;
+  }
+
+  .bar-nav-container {
+    margin-left: 50px;
+  }
+
+  .page-container{
+    margin-top: 300px;
+  }
+}
+
+
+
+
+*/
+
+/*table, desktop
+@media (min-width: 601px) {
+  .bar-nav-container {
+    margin-left: 70px;
+  }
+}
+*/
+
+
