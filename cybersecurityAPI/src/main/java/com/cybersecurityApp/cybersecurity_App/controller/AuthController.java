@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth") // Todas las rutas de este controlador empezarán con /api/auth
 public class AuthController {
@@ -34,16 +37,19 @@ public class AuthController {
 
     @PostMapping("/register")
     //Recibe un DTO y se asegura de que sea valido (@valid)
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
             try{
                 //delega toda la logica de negocio a este servicio
                 authUserService.registerUser(registerRequestDTO);
-
-                return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado exitosamente.");
+                Map<String, String> body = new HashMap<>();
+                body.put("message", "Usuario registrado exitosamente.");
+                return ResponseEntity.status(HttpStatus.CREATED).body(body);
             } catch (RuntimeException e){
                 //captura el error de negocio (email duplicado) y devuelve 400
 
-                return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+                Map<String, String> body = new HashMap<>();
+                body.put("message", "Error: " + e.getMessage());
+                return ResponseEntity.badRequest().body(body);
             }
     }
 

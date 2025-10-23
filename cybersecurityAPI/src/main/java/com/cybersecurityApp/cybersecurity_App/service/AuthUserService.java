@@ -35,5 +35,8 @@ public class AuthUserService {
 
         //cifrado y guardado
         newUsuario.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
+
+        //Guardar nuevo usuario en la bbdd
+        userDao.save(newUsuario);
     }
 }

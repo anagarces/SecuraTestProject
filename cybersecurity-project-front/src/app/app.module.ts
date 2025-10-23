@@ -18,7 +18,7 @@ import { HomeComponent } from './inicio/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ContentDetailComponent } from './contenido/content-detail/content-detail.component';
 import { LoginComponent } from './login/login/login.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register/register.component';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -44,7 +44,8 @@ import { JwtInterceptor } from './services/jwt.interceptor';
     HttpClientModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

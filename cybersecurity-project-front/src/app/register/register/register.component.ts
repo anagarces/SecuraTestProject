@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -9,27 +10,56 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  userData = { nombre: '', email: '', password: '' };
+ 
+  registerForm: FormGroup;
+  backendErrors: any = {}; //errores que vienen del backend
   message = '';
-  error = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
+
+    this.registerForm = this.fb.group({
+      nombre: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(4)]]
+    });
+   }
+
 
   onSubmit(): void {
-    this.authService.register(this.userData).subscribe({
-      next: (response) => {
-        this.error = '';
-        this.message = '¡Registro exitoso! Serás redirigido a la página de login.';
-        // Espera 2 segundos y redirige al login
-        setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 2000);
+
+    //Si el formulario es invalido en el cliente, no enviamos la peticion
+    if(this.registerForm.invalid){
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    this.backendErrors = {};
+    this.message = '';
+
+    //enviamos la peticion al backend
+    this.authService.register(this.registerForm.value).subscribe({
+      next: (response: any) => {
+          this.message = response['message'];
+          setTimeout(() => this.router.navigate(['/']), 2000);
       },
-      error: (err) => {
-        this.message = '';
-        this.error = err.error.message || 'Error en el registro. Inténtalo de nuevo.';
+      error: (err: any) => {
         console.error('Error en el registro:', err);
+
+        //Si el backend devolvio errores de validacion
+        if(err.status === 400 && typeof err.error === 'object'){
+          this.backendErrors = err.error; //Ej: {email: '....' password: '...'}
+        } else{
+          this.backendErrors = {};
+          this.message = err.error?.['message'] || 'Error en el registro. Vuelve a intentarlo.';
+        }
+
       }
+
     });
+  }
+
+  //Metodo de ayuda para acceder facilmente a los controles en la plantilla
+  get f(){
+    return this.registerForm.controls;
   }
 }
