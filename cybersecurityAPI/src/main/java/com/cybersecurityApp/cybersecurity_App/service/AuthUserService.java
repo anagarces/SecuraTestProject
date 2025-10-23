@@ -5,8 +5,10 @@ import com.cybersecurityApp.cybersecurity_App.model.dao.UserDao;
 import com.cybersecurityApp.cybersecurity_App.model.dto.RegisterRequestDTO;
 import org.mapstruct.control.MappingControl;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 //servicio para manejar autenticacion de usuarios
+@Service
 public class AuthUserService {
 
     //inyectamos dependencias

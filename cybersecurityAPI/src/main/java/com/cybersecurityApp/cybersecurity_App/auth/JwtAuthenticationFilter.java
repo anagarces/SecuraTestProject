@@ -40,14 +40,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //contiene logica del filtro que se ejecuta en la peticion, respuesta y cadena de filtros
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
+            @NonNull HttpServletRequest request, //contiene lo que llega del front: header, body, url, etc.
+            @NonNull HttpServletResponse response, //lo que devolveras al cliente
+            @NonNull FilterChain filterChain //la cadena para pasar la solicitud al siguiente filtro
     ) throws ServletException, IOException {
 
-        //Intenta obtener el encabezado http authorization que es donde el cliente envia el token
-        final String authHeader = request.getHeader("Authorization");
+        //detectar la url solicitada, ej, el endpoint especificado
+        final String requestPath = request.getServletPath();
 
+        // Ignorar los endpoints públicos (login, registro, etc.)
+        //Si es alguna de estas rutas, no intentes validar ningun token.
+        //Pasa la solicitud al siguiente filtro
+        if (requestPath.startsWith("/api/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
+        //Buscar si en la solicitud trae un token en el header
+        final String authHeader = request.getHeader("Authorization");
+        //Si no hay token, dejar pasar
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -58,7 +70,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //llama al service jwt y extrae el nombre de usuario del cuerpo del token
         final String userEmail = jwtService.extractUsername(jwt);
 
+        //Verificar si el usuario esta autenticado en el contexto
+        //1. Comprueba que el token contenia un usuario valido
+        //2. Que todavia no hay un usuario autenticado en el contexto de srguridad actual
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            //validar el token y autenticar
+            //cargar detalles del usuario desde la fuente de datos
+            //comprobar si el token corresponde con el usuario y no ha expirado
+            //si es correcto, crea un objeto Authentication con datos del usuario y se mete en el securitycontextholder
+            //a partir de ahora, esta peticion tiene un usuario autenticado con estos roles
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -71,6 +92,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
+        //Pasar la peticion al siguiente filtro o controlador
         filterChain.doFilter(request, response);
     }
 }
