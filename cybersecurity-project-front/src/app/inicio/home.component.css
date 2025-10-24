@@ -1,0 +1,57 @@
+h1{
+    font-size: 35px;
+}
+
+h2{
+    font-size: 30px;
+    color: rgb(27, 26, 26);
+}
+
+#app-title{
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.seccion-parrafos{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.seccion-texto{
+    /*border: 0px solid rgba(39, 39, 230, 0.158);*/
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 20px;
+    text-align: justify;
+    background-color: rgba(10, 10, 43, 0.103);
+    color: rgb(23, 23, 26);
+}
+
+.texto-titulo-enlace{
+    text-align: center;
+    font-size: 35px;
+    margin-top: 45px;
+    color: rgb(29, 29, 97);
+}
+
+.contenido-parrafo{
+    padding: 20px;
+}
+
+.boton-registrar{
+    font-size: 20px;
+}
+
+.seccion-registrar{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-left: 40px;
+    margin-top: 30px;
+}
+
+#cuestionario-texto{
+    font-weight: bold;
+    color: rgb(43, 40, 40);
+}

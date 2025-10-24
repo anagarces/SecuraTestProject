@@ -1,56 +1,61 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <!-- Nombre -->
-  <div>
-    <label>Nombre:</label>
-    <input formControlName="nombre" type="text" />
-    <!-- Errores de validación del cliente -->
-    <div *ngIf="f['nombre'].touched && f['nombre'].errors">
-      <small *ngIf="f['nombre'].errors['required']" class="error"
-        >El nombre es obligatorio.</small
-      >
-    </div>
+  <div class="register-text">
+    <p>
+      Da el salto a la seguridad: regístrate ahora y convierte tu conocimiento
+      en el mejor cortafuegos de la empresa.
+    </p>
   </div>
 
-  <!-- Email -->
   <div>
-    <label>Email:</label>
-    <input formControlName="email" type="email" />
-    <!-- Errores del backend -->
-    <div *ngIf="backendErrors.email" class="error">
-      {{ backendErrors.email }}
-    </div>
-    <!-- Errores del cliente -->
-    <div *ngIf="f['email'].touched && f['email'].errors">
-      <small *ngIf="f['email'].errors['required']" class="error"
-        >El email es obligatorio.</small
-      >
-      <small *ngIf="f['email'].errors['email']" class="error"
-        >El formato del email no es válido.</small
-      >
+    <div class="register-container">
+      <!-- Nombre -->
+      <label>Nombre:</label>
+      <input formControlName="nombre" type="text" />
+      <!-- Errores de validación del cliente -->
+      <div *ngIf="f['nombre'].touched && f['nombre'].errors">
+        <small *ngIf="f['nombre'].errors['required']" class="error"
+          >El nombre es obligatorio.</small
+        >
+      </div>
+
+      <!-- Email -->
+      <label>Email:</label>
+      <input formControlName="email" type="email" />
+      <!-- Errores del backend -->
+      <div *ngIf="backendErrors.email" class="error">
+        {{ backendErrors.email }}
+      </div>
+      <!-- Errores del cliente -->
+      <div *ngIf="f['email'].touched && f['email'].errors">
+        <small *ngIf="f['email'].errors['required']" class="error"
+          >El email es obligatorio.</small
+        >
+        <small *ngIf="f['email'].errors['email']" class="error"
+          >El formato del email no es válido.</small
+        >
+      </div>
+
+      <!-- Contraseña -->
+      <label>Contraseña:</label>
+      <input formControlName="password" type="password" />
+      <!-- Errores del backend -->
+      <div *ngIf="backendErrors.password" class="error">
+        {{ backendErrors.password }}
+      </div>
+      <!-- Errores del cliente -->
+      <div *ngIf="f['password'].touched && f['password'].errors">
+        <small *ngIf="f['password'].errors['required']" class="error"
+          >La contraseña es obligatoria.</small
+        >
+        <small *ngIf="f['password'].errors['minlength']" class="error"
+          >Debe tener al menos 4 caracteres.</small
+        >
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid">Registrar</button>
+
+      <!-- Mensaje de éxito -->
+      <div *ngIf="message" class="success">{{ message }}</div>
     </div>
   </div>
-
-  <!-- Contraseña -->
-  <div>
-    <label>Contraseña:</label>
-    <input formControlName="password" type="password" />
-    <!-- Errores del backend -->
-    <div *ngIf="backendErrors.password" class="error">
-      {{ backendErrors.password }}
-    </div>
-    <!-- Errores del cliente -->
-    <div *ngIf="f['password'].touched && f['password'].errors">
-      <small *ngIf="f['password'].errors['required']" class="error"
-        >La contraseña es obligatoria.</small
-      >
-      <small *ngIf="f['password'].errors['minlength']" class="error"
-        >Debe tener al menos 4 caracteres.</small
-      >
-    </div>
-  </div>
-
-  <button type="submit" [disabled]="registerForm.invalid">Registrar</button>
-
-  <!-- Mensaje de éxito -->
-  <div *ngIf="message" class="success">{{ message }}</div>
 </form>
