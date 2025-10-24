@@ -10,8 +10,13 @@ import { RegisterComponent } from './register/register/register.component';
 const routes: Routes = [
 
 
-  // Es la primera página que verá un usuario.
-  { path: '', component: LoginComponent },
+  //Pagina principal
+{ path: '', component: HomeComponent},
+
+//Formulario de inicio de sesion
+{path: 'login', component: LoginComponent},
+
+  //Formulario de registro
    { path: 'register', component: RegisterComponent },
     
   {// Nadie puede acceder a ella ni a sus sub-rutas sin haber iniciado sesión.
