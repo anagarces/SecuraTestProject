@@ -16,7 +16,7 @@ const routes: Routes = [
     
   {// Nadie puede acceder a ella ni a sus sub-rutas sin haber iniciado sesión.
     path: 'contenido',
-    canActivate: [AuthGuard], // <-- El portero protege esta ruta
+    canActivate: [AuthGuard], // El portero protege esta ruta
     component: ContentComponent
   },
 
@@ -25,7 +25,7 @@ const routes: Routes = [
     canActivate: [AuthGuard], // <-- El portero también protege esta
     component: ContentDetailComponent
   },
-   // 5. (Opcional pero recomendado) Redirige cualquier ruta no encontrada a la página de inicio.
+   // 5. Redirige cualquier ruta no encontrada a la página de inicio.
   // Esta debe ser SIEMPRE la última ruta de la lista.
   { path: '**', redirectTo: '' }
 ];

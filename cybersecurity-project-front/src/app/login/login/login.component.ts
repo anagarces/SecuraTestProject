@@ -19,7 +19,7 @@ export class LoginComponent {
       next: (response) => {
         // Si el login es exitoso, redirigimos a la página de contenidos
         localStorage.setItem('auth_token', response.token);
-        this.router.navigate(['/contenidos']);
+        this.router.navigate(['/contenido']);
       },
       error: (err) => {
         // Si hay un error (ej. 401), mostramos un mensaje
