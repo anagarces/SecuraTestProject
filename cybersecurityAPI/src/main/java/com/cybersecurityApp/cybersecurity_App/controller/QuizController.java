@@ -2,6 +2,8 @@ package com.cybersecurityApp.cybersecurity_App.controller;
 
 import com.cybersecurityApp.cybersecurity_App.model.Quiz;
 import com.cybersecurityApp.cybersecurity_App.model.dao.QuizDao;
+import com.cybersecurityApp.cybersecurity_App.model.dto.QuizDetailDTO;
+import com.cybersecurityApp.cybersecurity_App.model.dto.dtomapper.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +18,18 @@ public class QuizController {
     @Autowired
     private QuizDao quizDao;
 
+    @Autowired
+    private DTOMapper dtoMapper;
+
     @GetMapping
     public List<Quiz> getAll() {
         return quizDao.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Quiz> getById(@PathVariable Long id) {
+    public ResponseEntity<QuizDetailDTO> getById(@PathVariable Long id) {
         return quizDao.findById(id)
-                .map(ResponseEntity::ok)
+                .map(quiz -> ResponseEntity.ok(dtoMapper.toQuizDetailDTO(quiz)))
                 .orElse(ResponseEntity.notFound().build());
     }
 

@@ -18,7 +18,7 @@ public class SubmissionAnswer { //respuestas marcadas por el usuario en un envio
     private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "option_id")
+    @JoinColumn(name = "selected_option_id", nullable = false)
     private OptionItem option;
 
     public SubmissionAnswer(){}

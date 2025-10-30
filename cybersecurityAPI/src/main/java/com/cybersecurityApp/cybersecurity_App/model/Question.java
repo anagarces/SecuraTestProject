@@ -19,8 +19,8 @@ public class Question { //representa una pregunta del quiz
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OptionItem> options = new ArrayList<>();
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    private List<OptionItem> options;
 
     public Question(){}
 

@@ -10,7 +10,9 @@ public class OptionItem { //representa una opcion de respuesta para una pregunta
     private Long id;
 
     private String text;
-    private boolean correct;
+
+    @Column(name = "is_correct")
+    private boolean isCorrect;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -36,11 +38,11 @@ public class OptionItem { //representa una opcion de respuesta para una pregunta
     }
 
     public boolean isCorrect() {
-        return correct;
+        return isCorrect;
     }
 
     public void setCorrect(boolean correct) {
-        this.correct = correct;
+        isCorrect = correct;
     }
 
     public Question getQuestion() {

@@ -17,7 +17,7 @@ export class QuizListComponent implements OnInit{
   ngOnInit(): void {
 
     // Cuando se carga el componente, obtenemos todos los cuestionarios
-    this.quizService.getAll().subscribe({
+    this.quizService.getAllQuizzes().subscribe({
       next: (data) => this.quizzes = data, // guardamos la respuesta
       error: (err) => console.error('Error cargando quizzes:', err) // manejamos errores
     });

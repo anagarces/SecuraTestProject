@@ -2,9 +2,12 @@ package com.cybersecurityApp.cybersecurity_App.service;
 
 import com.cybersecurityApp.cybersecurity_App.model.*;
 import com.cybersecurityApp.cybersecurity_App.model.dao.OptionItemDao;
+import com.cybersecurityApp.cybersecurity_App.model.dao.QuizDao;
 import com.cybersecurityApp.cybersecurity_App.model.dao.SubmissionDao;
+import com.cybersecurityApp.cybersecurity_App.model.dao.UserDao;
 import com.cybersecurityApp.cybersecurity_App.model.dto.SubmissionAnswerDTO;
 import com.cybersecurityApp.cybersecurity_App.model.dto.SubmissionRequestDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,57 +17,47 @@ import java.util.List;
 @Service
 public class SubmissionService {
 
-    @Autowired
-    private SubmissionDao submissionDao;
 
-    @Autowired
-    private OptionItemDao optionItemDao;
+    private final SubmissionDao submissionDao;
+    private final OptionItemDao optionItemDao;
+    private final QuizDao quizDao;
+    private final UserDao userDao;
 
-    /**
-     * Procesa un cuestionario enviado por un usuario:
-     * - Calcula el puntaje
-     * - Guarda la Submission y sus respuestas
-     * - Devuelve el objeto Submission persistido
-     */
+    public SubmissionService(SubmissionDao submissionDao, OptionItemDao optionItemDao,
+                             QuizDao quizDao, UserDao userDao) {
+        this.submissionDao = submissionDao;
+        this.optionItemDao = optionItemDao;
+        this.quizDao = quizDao;
+        this.userDao = userDao;
+    }
+
+    @Transactional
     public Submission processSubmission(SubmissionRequestDTO dto) {
-
-        // Crear la entidad principal Submission
         Submission submission = new Submission();
-        submission.setUser(new Usuario(dto.getUserId())); // Crea referencia al usuario
-        submission.setQuiz(new Quiz(dto.getQuizId())); // Crea referencia al quiz
+        submission.setQuiz(quizDao.findById(dto.getQuizId()).orElseThrow());
+        submission.setUser(userDao.findById(dto.getUserId()).orElseThrow());
 
         int score = 0;
-        List<SubmissionAnswer> answerEntities = new ArrayList<>();
 
-        //Recorrer todas las respuestas que llegan desde el DTO
         for (SubmissionAnswerDTO answer : dto.getAnswers()) {
+            OptionItem selected = optionItemDao.findById(answer.getOptionId()).orElseThrow();
 
-            // Buscar la opción selec cionada en la BD
-            OptionItem selectedOption = optionItemDao.findById(answer.getOptionId())
-                    .orElseThrow(() -> new RuntimeException("Opción no encontrada con ID: " + answer.getOptionId()));
+            SubmissionAnswer subAnswer = new SubmissionAnswer();
+            subAnswer.setQuestion(selected.getQuestion());
+            subAnswer.setOption(selected);
+            subAnswer.setSubmission(submission);
 
-            // Verificar si es correcta y sumar puntaje
-            if (selectedOption.isCorrect()) {
+            submission.getAnswers().add(subAnswer);
+
+            if (selected.isCorrect()) {
                 score++;
             }
-
-            // Crear el SubmissionAnswer (una respuesta individual)
-            SubmissionAnswer submissionAnswer = new SubmissionAnswer();
-            submissionAnswer.setSubmission(submission);
-            submissionAnswer.setQuestion(new Question(answer.getQuestionId()));
-            submissionAnswer.setOption(selectedOption);
-
-            answerEntities.add(submissionAnswer);
         }
 
-        // 3️⃣ Asignar resultados al Submission
         submission.setScore(score);
-        submission.setAnswers(answerEntities);
+        submission.setTotalQuestions(dto.getAnswers().size());
 
-        //Guardar en la bbdd
-        Submission savedSubmission = submissionDao.save(submission);
-
-        //Devolver el resultado guardado
-        return savedSubmission;
+        submissionDao.save(submission);
+        return submission;
     }
 }

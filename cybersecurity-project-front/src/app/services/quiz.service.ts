@@ -10,16 +10,15 @@ export class QuizService {
 
   private baseUrl = 'http://localhost:8080/api/quizzes';
 
-  constructor(private http: HttpClient) { }
+  private apiUrl = 'http://localhost:8080/api/quizzes';
 
-   // Obtiene todos los cuestionarios disponibles desde el backend
-  getAll(): Observable<Quiz[]>{
+  constructor(private http: HttpClient) {}
 
-    return this.http.get<Quiz[]>(this.baseUrl);
+  getAllQuizzes(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
   }
 
-  // Obtiene un cuestionario específico (por ID)
-    getById(id: number): Observable<Quiz> {
-    return this.http.get<Quiz>(`${this.baseUrl}/${id}`);
+  getQuizById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 }
