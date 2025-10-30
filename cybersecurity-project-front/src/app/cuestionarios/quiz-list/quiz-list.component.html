@@ -1,0 +1,25 @@
+<div class="quiz-list-container">
+  <h2 class="text-xl font-semibold mb-4">Cuestionarios disponibles</h2>
+
+  <div *ngIf="quizzes.length === 0" class="text-gray-500">
+    No hay cuestionarios disponibles
+  </div>
+
+  <ul class="quiz-list">
+    <li
+      *ngFor="let quiz of quizzes"
+      class="quiz-item"
+      [routerLink]="['/quiz', quiz.id]"
+      style="
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #100833;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      "
+    >
+      <h3 style="margin: 0">{{ quiz.title }}</h3>
+      <p style="margin: 0; color: gray">{{ quiz.description }}</p>
+    </li>
+  </ul>
+</div>

@@ -79,6 +79,8 @@
                  .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                  .authorizeHttpRequests(auth -> auth
                          .requestMatchers("/api/auth/**").permitAll()
+                         .requestMatchers("/api/quizzes/**").authenticated()
+                         .requestMatchers("/api/submissions/**").authenticated()
                          .anyRequest().authenticated()
                  );
 
