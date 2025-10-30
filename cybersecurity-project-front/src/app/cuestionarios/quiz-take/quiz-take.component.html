@@ -1,0 +1,31 @@
+<section *ngIf="quiz">
+  <h2>{{ quiz.title }}</h2>
+  <p>{{ quiz.description }}</p>
+
+  <form (ngSubmit)="submitQuiz()">
+    <div *ngFor="let question of quiz.questions">
+      <h4>{{ question.text }}</h4>
+
+       <!-- Lista de opciones -->
+      <div *ngFor="let option of question.options">
+        <label>
+          <input
+            type="radio"
+            [name]="'question-' + question.id"
+            [value]="option.id"
+            (change)="selectOption(question.id, option.id)"
+          />
+          {{ option.text }}
+        </label>
+      </div>
+    </div>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  
+  <!-- Mostrar resultado cuando el backend responde -->
+  <div *ngIf="result">
+    <h3>Tu puntuación: {{ result.score }} / {{ result.totalQuestions }}</h3>
+  </div>
+</section>

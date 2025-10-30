@@ -6,6 +6,8 @@ import { ContentDetailComponent } from './contenido/content-detail/content-detai
 import { LoginComponent } from './login/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register/register.component';
+import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
+import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
 
 const routes: Routes = [
 
@@ -30,9 +32,18 @@ const routes: Routes = [
     canActivate: [AuthGuard], // <-- El portero también protege esta
     component: ContentDetailComponent
   },
+
+  { path: 'quizzes', component: QuizListComponent },
+
+  //Muestra un cuestionario
+  { path: 'quiz/:id', component: QuizTakeComponent },
+
    // 5. Redirige cualquier ruta no encontrada a la página de inicio.
   // Esta debe ser SIEMPRE la última ruta de la lista.
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
+
+  //Lista de cuestionarios
+
 ];
 
 @NgModule({

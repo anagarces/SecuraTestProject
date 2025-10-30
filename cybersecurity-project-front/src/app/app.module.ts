@@ -23,6 +23,8 @@ import { RegisterComponent } from './register/register/register.component';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './services/jwt.interceptor';
+import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
+import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
 
 
 @NgModule({
@@ -33,6 +35,8 @@ import { JwtInterceptor } from './services/jwt.interceptor';
     ContentDetailComponent,
     LoginComponent,
     RegisterComponent,
+    QuizListComponent,
+    QuizTakeComponent,
   
   ],
   imports: [

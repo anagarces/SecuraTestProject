@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 @Table(name = "users") //especifica el nombre de la tabla en la bbbdd
 public class Usuario {
 
+
+
     @Id //marcar este campo como la clave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +23,9 @@ public class Usuario {
 //constructor vacio obligatorio para que el motor de persistencia JPA pueda crear objetos de esta clase
     public Usuario() {}
 
+    public Usuario(Long id) {
+        this.id = id;
+    }
     //getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
