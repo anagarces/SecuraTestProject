@@ -1,0 +1,16 @@
+.resultado-container {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+
+.resultado-container h2 {
+  color: #007bff;
+}
+
+button {
+  margin-top: 10px;
+}

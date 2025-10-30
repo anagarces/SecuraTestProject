@@ -11,12 +11,6 @@ import java.util.List;
 @Table(name = "quiz")
 public class Quiz {
 
-    public Quiz(Long id) {
-        this.id = id;
-    }
-
-    public Quiz() {}
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +24,19 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Question> questions = new ArrayList<>();
 
+    public Quiz(Long id) {
+        this.id = id;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public Quiz() {}
     public Long getId() {
         return id;
     }

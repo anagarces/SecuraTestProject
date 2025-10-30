@@ -1,31 +1,40 @@
-<section *ngIf="quiz">
+<!-- Si todavía no se ha enviado el quiz -->
+<div *ngIf="quiz && !result">
   <h2>{{ quiz.title }}</h2>
   <p>{{ quiz.description }}</p>
 
   <form (ngSubmit)="submitQuiz()">
-    <div *ngFor="let question of quiz.questions">
-      <h4>{{ question.text }}</h4>
+    <div *ngFor="let q of quiz.questions">
+      <h4>{{ q.text }}</h4>
 
-       <!-- Lista de opciones -->
-      <div *ngFor="let option of question.options">
+      <div *ngFor="let opt of q.options">
         <label>
           <input
             type="radio"
-            [name]="'question-' + question.id"
-            [value]="option.id"
-            (change)="selectOption(question.id, option.id)"
+            [name]="'question-' + q.id"
+            [value]="opt.id"
+            [(ngModel)]="answers[q.id]"
           />
-          {{ option.text }}
+          {{ opt.text }}
         </label>
       </div>
+
+      <hr />
     </div>
 
-    <button type="submit">Enviar</button>
+    <button type="submit" class="btn btn-primary mt-3">Enviar</button>
   </form>
+</div>
 
-  
-  <!-- Mostrar resultado cuando el backend responde -->
-  <div *ngIf="result">
-    <h3>Tu puntuación: {{ result.score }} / {{ result.totalQuestions }}</h3>
-  </div>
-</section>
+<!-- Si ya se envió el quiz, mostramos el resultado -->
+<div *ngIf="result" class="resultado-container">
+  <h2>Resultado</h2>
+  <p>
+    Puntuación obtenida: <strong>{{ result.score }}</strong> de
+    {{ result.totalQuestions }}
+  </p>
+
+  <button class="btn btn-secondary" routerLink="/quizzes">
+    Volver a los cuestionarios
+  </button>
+</div>

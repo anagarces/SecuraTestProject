@@ -9,25 +9,22 @@ import java.util.List;
 @Entity
 @Table(name = "submission")
 public class Submission { // envio del quiz terminado de un usuario
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime submittedAt = LocalDateTime.now();
-    private int score;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne @JoinColumn(name = "user_id")
     private Usuario user;
 
-    @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @ManyToOne @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
     private List<SubmissionAnswer> answers = new ArrayList<>();
 
-    public Submission(){}
+    private int score;
+    private int totalQuestions;
 
     public Long getId() {
         return id;
@@ -35,22 +32,6 @@ public class Submission { // envio del quiz terminado de un usuario
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
-    }
-
-    public void setSubmittedAt(LocalDateTime submittedAt) {
-        this.submittedAt = submittedAt;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public Usuario getUser() {
@@ -75,5 +56,21 @@ public class Submission { // envio del quiz terminado de un usuario
 
     public void setAnswers(List<SubmissionAnswer> answers) {
         this.answers = answers;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getTotalQuestions() {
+        return totalQuestions;
+    }
+
+    public void setTotalQuestions(int totalQuestions) {
+        this.totalQuestions = totalQuestions;
     }
 }

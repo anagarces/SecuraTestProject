@@ -12,54 +12,56 @@ import { SubmissionService } from 'src/app/services/submission.service';
   styleUrls: ['./quiz-take.component.css']
 })
 export class QuizTakeComponent implements OnInit{
-
-   quiz!: Quiz;   // cuestionario cargado desde backend
-  selectedAnswers: { [key: number]: number } = {}; // almacena qué opción eligió el usuario por pregunta
-  result: SubmissionResponse | null = null; // resultado final devuelto por backend
-  userId = 1; // // se reemplazará con el id real del usuario logueado
+quiz: any; // Cuestionario cargado desde el backend
+  answers: { [questionId: number]: number } = {}; // Respuestas seleccionadas por el usuario
+  result: any = null; // Resultado del envío (score)
+  userId: number = 1; // ⚠️ Cambia esto cuando obtengas el ID real del usuario logueado
 
   constructor(
-    private route: ActivatedRoute, // para obtener el ID desde la URL
-    private quizService: QuizService, // para obtener el quiz
-    private submissionService: SubmissionService // para enviar respuestas
+    private route: ActivatedRoute,
+    private quizService: QuizService,
+    private submissionService: SubmissionService
   ) {}
 
   ngOnInit(): void {
-      // Obtener ID de cuestionario desde la ruta actual (ej. /quiz/3)
-    const quizId = Number(this.route.snapshot.paramMap.get('id'));
-      // Llamar al servicio para traer el cuestionario
-    this.quizService.getById(quizId).subscribe({
-      next: (data) => this.quiz = data,
-      error: (err) => console.error('Error al cargar el cuestionario:', err)
-    });
+    const quizId = this.route.snapshot.paramMap.get('id');
+    if (quizId) {
+      this.quizService.getQuizById(+quizId).subscribe({
+        next: (data) => {
+          this.quiz = data;
+          console.log('Quiz cargado:', this.quiz);
+        },
+        error: (err) => console.error('Error cargando quiz', err)
+      });
+    }
   }
 
-  
-  // Cuando el usuario selecciona una opción
-  selectOption(questionId: number, optionId: number): void {
-    this.selectedAnswers[questionId] = optionId;
-  }
-
-   // Cuando el usuario envía el formulario
   submitQuiz(): void {
-    // Convertimos las respuestas elegidas en un array de objetos {questionId, optionId}
-    const answers: SubmissionAnswer[] = Object.keys(this.selectedAnswers).map(qId => ({
-      questionId: Number(qId),
-      optionId: this.selectedAnswers[Number(qId)]
-    }));
+    if (!this.quiz || Object.keys(this.answers).length === 0) {
+      alert('Por favor responde al menos una pregunta.');
+      return;
+    }
 
-    // Creamos el objeto que se enviará al backend
-    const submission: SubmissionRequest = {
+    const submission = {
       userId: this.userId,
       quizId: this.quiz.id,
-      answers
+      answers: Object.keys(this.answers).map(qId => ({
+        questionId: Number(qId),
+        optionId: this.answers[Number(qId)]
+      }))
     };
 
-    // Llamamos al servicio para enviar las respuestas al backend
+    console.log('Enviando submission:', submission);
+
     this.submissionService.submit(submission).subscribe({
-      next: (response) => this.result = response,
-      error: (err) => console.error('Error al enviar respuestas:', err)
+      next: (result) => {
+        console.log('Resultado recibido:', result);
+        this.result = result; // Guardamos el resultado para mostrarlo
+      },
+      error: (err) => {
+        console.error('Error enviando quiz', err);
+        alert('Ocurrió un error al enviar tus respuestas.');
+      }
     });
   }
-
 }
