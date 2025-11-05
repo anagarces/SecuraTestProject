@@ -14,11 +14,11 @@
     <p>No hay contenido disponible en este momento.</p>
   </div>
 
-  <div *ngIf="todosLosContenidos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div *ngIf="todosLosContenidos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  contenedor-tarjeta">
 
       <!--CARD INDIVIDUAL-->
     <div *ngFor="let item of cardsAMostrar">
-      <div class="max-w-sm h-full flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <div class="max-w-sm h-full flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700  tarjeta-individual">
         <a [routerLink]="['/contenido', item.idContenido]">
            <!---<img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" /> --> 
         </a>
