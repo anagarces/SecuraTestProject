@@ -8,10 +8,11 @@ import com.cybersecurityApp.cybersecurity_App.model.dao.UserDao;
 import com.cybersecurityApp.cybersecurity_App.model.dto.SubmissionAnswerDTO;
 import com.cybersecurityApp.cybersecurity_App.model.dto.SubmissionRequestDTO;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,7 +36,16 @@ public class SubmissionService {
     public Submission processSubmission(SubmissionRequestDTO dto) {
         Submission submission = new Submission();
         submission.setQuiz(quizDao.findById(dto.getQuizId()).orElseThrow());
-        submission.setUser(userDao.findById(dto.getUserId()).orElseThrow());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            throw new IllegalStateException("No se pudo determinar el usuario autenticado");
+        }
+
+        String email = authentication.getName();
+        Usuario user = userDao.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Usuario no encontrado: " + email));
+        submission.setUser(user);
 
         int score = 0;
 

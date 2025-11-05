@@ -13,8 +13,7 @@ export class SubmissionService {
   constructor(private http: HttpClient) { }
 
   // Envía las respuestas del usuario al backend
-  submit(submission: any): Observable<any> {
-    
-    return this.http.post<any>(this.baseUrl, submission);
+  submit(submission: SubmissionRequest): Observable<SubmissionResponse> {
+    return this.http.post<SubmissionResponse>(this.baseUrl, submission);
   }
 }
