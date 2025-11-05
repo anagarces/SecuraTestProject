@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Quiz } from 'src/app/model/quiz';
+import { QuizSummary } from 'src/app/model/quiz-summary';
 import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { QuizService } from 'src/app/services/quiz.service';
 })
 export class QuizListComponent implements OnInit{
   
-    quizzes: Quiz[] = []; // lista de cuestionarios que vendrá del backend
+    quizzes: QuizSummary[] = []; // lista de cuestionarios que vendrá del backend
 
   constructor(private quizService: QuizService, private router: Router) {}
 
