@@ -33,10 +33,18 @@ const routes: Routes = [
     component: ContentDetailComponent
   },
 
-  { path: 'quizzes', component: QuizListComponent },
+  {
+    path: 'quizzes',
+    canActivate: [AuthGuard],
+    component: QuizListComponent
+  },
 
   //Muestra un cuestionario
-  { path: 'quiz/:id', component: QuizTakeComponent },
+  {
+    path: 'quiz/:id',
+    canActivate: [AuthGuard],
+    component: QuizTakeComponent
+  },
 
    // 5. Redirige cualquier ruta no encontrada a la página de inicio.
   // Esta debe ser SIEMPRE la última ruta de la lista.
