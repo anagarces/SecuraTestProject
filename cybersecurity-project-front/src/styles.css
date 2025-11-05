@@ -12,9 +12,9 @@ body{
   position: relative;
   padding: 6rem 1.5rem;
   text-align: center;
-  color: white;
+  color: rgb(255, 255, 255);
   overflow: hidden;
-  background-image: url('/assets/images/headerContenidos/contenido9.jpg');
+  background-image: url('/assets/images/headerContenidos/contenido5.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -51,5 +51,5 @@ body{
 }
 
 .hero-inicio {
-  background-image: url('/assets/images/headerContenidos/contenido17.jpg');
+  background-image: url('/assets/images/headerContenidos/contenido8.jpg');
 }
