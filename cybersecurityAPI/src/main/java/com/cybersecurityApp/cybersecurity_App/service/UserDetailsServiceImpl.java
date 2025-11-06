@@ -29,12 +29,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Usuario usuarioFromDb = userDao.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el email: " + email));
 
-        //Si encuentra el usuario, el servicio convierte el objeto entidad en objeto estandar de Spring Security
-        //y se devuelven los datos correspondientes
+        // Obtenemos el rol del usuario desde la base de datos
+        String roleName = usuarioFromDb.getRole().name(); // USER o ADMIN
+
+        // Spring Security espera que los roles estén en formato "ROLE_X"
+        String springRole = "ROLE_" + roleName;
+
+        // Convertimos el objeto entidad en el formato estándar de Spring Security
         return new User(
                 usuarioFromDb.getEmail(),
-                usuarioFromDb.getPassword(), //contrasena cifrada que esta en la bbdd
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) //se le asigna un rol por defecto
+                usuarioFromDb.getPassword(), // Contraseña cifrada en la BD
+                Collections.singletonList(new SimpleGrantedAuthority(springRole))
         );
     }
 }

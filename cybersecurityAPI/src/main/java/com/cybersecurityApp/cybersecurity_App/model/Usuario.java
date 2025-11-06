@@ -20,6 +20,10 @@ public class Usuario {
 
     private String nombre; //campo opcional puede ser nulo
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER; // por defecto usuario normal
+
 //constructor vacio obligatorio para que el motor de persistencia JPA pueda crear objetos de esta clase
     public Usuario() {}
 
@@ -35,4 +39,12 @@ public class Usuario {
     public void setPassword(String password) { this.password = password; }
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

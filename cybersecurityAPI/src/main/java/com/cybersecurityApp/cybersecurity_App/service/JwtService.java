@@ -1,5 +1,6 @@
 package com.cybersecurityApp.cybersecurity_App.service;
 
+import com.cybersecurityApp.cybersecurity_App.model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
-//clase que gestiona la logica del JWT
-//responsabble de creer, leer y validar los tokens
+// Clase que gestiona la lógica del JWT
+// Responsable de crear, leer y validar los tokens
 @Service
 public class JwtService {
 
@@ -23,33 +26,49 @@ public class JwtService {
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
-   /*Recibe el objeto Authentication que prueba que el usuario ha iniciado sesion con exito*/
+    /* Recibe el objeto Authentication que prueba que el usuario ha iniciado sesión con éxito */
     public String generateToken(Authentication authentication) {
+
+        // Obtenemos los detalles del usuario autenticado
+        Object principal = authentication.getPrincipal();
+        String email = authentication.getName(); // el email siempre es el "subject" del token
+        String role = "USER"; // valor por defecto
+
+        // Si el objeto principal es nuestra entidad Usuario, extraemos el rol real
+        if (principal instanceof Usuario usuario) {
+            role = usuario.getRole().name(); // USER o ADMIN
+        }
+
+        // Creamos un mapa con claims adicionales
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+
         return Jwts.builder()
-                .setSubject(authentication.getName()) // establece el sujeto del token. en este caso, el email.
-                .setIssuedAt(new Date(System.currentTimeMillis())) //establece fecha de emision del token
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // fecha de expiracion del token
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // usa la clave secreta y un algoritmo para firmar el token.
-                .compact(); //finaliza la construccion y produce la cadena JWT codificada final
+                .setClaims(claims)
+                .setSubject(email) // establece el sujeto del token (el email)
+                .setIssuedAt(new Date(System.currentTimeMillis())) // fecha de emisión
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24h
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // firma con clave secreta
+                .compact(); // finaliza y produce la cadena JWT
     }
 
-   /* extrae el email del usuario del payload del token */
+    /* Extrae el email del usuario del payload del token */
     public String extractUsername(String token) {
-
-        //decodificacion. utiliza la clave secreta para verificar firma
-        //si es valida, decodifica el token y devuelve todos los claim si no, se lanza excepcion
         return extractClaim(token, Claims::getSubject);
-
     }
 
- /*verifica si el token es usable*/
+    /* Extrae el rol desde el token */
+    public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
+    }
+
+    /* Verifica si el token es usable */
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token); //extrae el email del token
-        //el token sera valido solo si el email extraido coincide con el de UserDetails cargado de la bbdd o el token no ha expirado
+        final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    //comprueba si la fecha de expiracion del token es anterior a la hora actual
+    // Comprueba si la fecha de expiración del token es anterior a la hora actual
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -58,7 +77,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    /*utilidad para extraer cualquier claim especifico por ej, el sujeto o la expiracion del cuerpo del token decodificado*/
+    /* Utilidad para extraer cualquier claim específico (por ej. el sujeto o la expiración) */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -72,8 +91,7 @@ public class JwtService {
                 .getBody();
     }
 
-    //convierte la secret key en un objeto de tipo Key que la libreria JJWT puede usar internamente para la firma
-    //y verificacion criptografica
+    // Convierte la secret key en un objeto de tipo Key que la librería JJWT puede usar internamente
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
