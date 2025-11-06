@@ -2,15 +2,65 @@
   text-align: center;
   margin-top: 30px;
   padding: 20px;
-  border: 2px solid #007bff;
+  border: 2px solid #02080e;
   border-radius: 10px;
   background-color: #f8f9fa;
 }
 
 .resultado-container h2 {
-  color: #007bff;
+  color: #031120;
+  font-size: 30px;
+}
+
+.resultado-container p{
+  font-size: 20px;
 }
 
 button {
   margin-top: 10px;
 }
+
+
+.contenedor-quiz{
+  margin: 25px 30px;
+  padding: 15px;
+}
+
+.quiz-title{
+  text-align: center;
+  font-size: 35px;
+  color: #071f3a;
+}
+
+.quiz-desc{
+  font-size: 18px;
+  text-align: center;
+  color: rgb(100, 96, 96);
+}
+
+.texto-quiz{
+  font-size: 20px;
+  font-weight: bold;
+  color: #071f3a;
+}
+
+.input-quiz{
+  font-size: 18px;
+  margin: 15px 25px;
+}
+
+.contenedor-pregunta{
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+
+button{
+  background-color: #071f3a;
+  color: #f8f9fa;
+  font-size: 18px;
+  width: 150px;
+  height: 50px;
+  border-radius: 5px;
+}
+
