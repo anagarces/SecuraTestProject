@@ -70,6 +70,6 @@ export class AuthService {
     // Hacemos la petición a la ruta protegida, pasando las cabeceras.
     return this.http.get(`${this.contentApiUrl}/getAll`, { headers: headers });
   }
-  // ===================================================================
+
 }
 

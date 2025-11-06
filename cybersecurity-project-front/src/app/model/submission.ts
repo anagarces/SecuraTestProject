@@ -8,7 +8,7 @@ export interface SubmissionRequest {
 
 // Datos que el backend nos devuelve después de guardar el envío
 export interface SubmissionResponse {
-  quizId: number;          // ID del cuestionario respondido
+  quizId?: number;          // ID del cuestionario respondido
   score: number;           // Puntuación obtenida
   totalQuestions: number;  // Total de preguntas en el quiz
 }
