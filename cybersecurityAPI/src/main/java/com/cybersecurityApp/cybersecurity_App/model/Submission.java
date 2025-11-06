@@ -25,6 +25,14 @@ public class Submission { // envio del quiz terminado de un usuario
 
     private int score;
     private int totalQuestions;
+    private LocalDateTime submittedAt;
+    private LocalDateTime finishedAt;
+
+
+    @PrePersist
+    protected void onCreate() {
+        this.submittedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -72,5 +80,21 @@ public class Submission { // envio del quiz terminado de un usuario
 
     public void setTotalQuestions(int totalQuestions) {
         this.totalQuestions = totalQuestions;
+    }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
+    }
+
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
+    }
+
+    public LocalDateTime getFinishedAt() {
+        return finishedAt;
+    }
+
+    public void setFinishedAt(LocalDateTime finishedAt) {
+        this.finishedAt = finishedAt;
     }
 }
