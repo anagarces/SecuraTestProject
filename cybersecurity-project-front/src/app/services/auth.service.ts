@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { AuthResponse } from '../model/auth-response';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +19,16 @@ export class AuthService {
    * Llama al endpoint de login del backend.
    * Si es exitoso, guarda el token en el navegador.
    */
-  login(credentials: {email: string, password: string}): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => {
-        // 'tap' nos permite espiar la respuesta sin modificarla
-        // Guardamos el token en el almacenamiento local del navegador
-        localStorage.setItem('auth_token', response.token);
-      })
-    );
+  login(credentials: { email: string, password: string }): Observable<AuthResponse> {
+  return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
+    tap(response => {
+      localStorage.setItem('auth_token', response.token);
+
+      const decoded: any = jwtDecode(response.token)
+      localStorage.setItem('user_role', decoded.role); // 👈 Guardamos el rol
+    })
+  );
+
   }
 
 
@@ -70,6 +73,6 @@ export class AuthService {
     // Hacemos la petición a la ruta protegida, pasando las cabeceras.
     return this.http.get(`${this.contentApiUrl}/getAll`, { headers: headers });
   }
-  // ===================================================================
+
 }
 

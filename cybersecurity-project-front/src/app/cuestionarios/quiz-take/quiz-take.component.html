@@ -1,14 +1,14 @@
 <!-- Si todavía no se ha enviado el quiz -->
-<div *ngIf="quiz && !result">
-  <h2>{{ quiz.title }}</h2>
-  <p>{{ quiz.description }}</p>
+<div *ngIf="quiz && !result" class="contenedor-quiz">
+  <h2 class="quiz-title">{{ quiz.title }}</h2>
+  <p class="quiz-desc">{{ quiz.description }}</p>
 
   <form (ngSubmit)="submitQuiz()">
-    <div *ngFor="let q of quiz.questions">
-      <h4>{{ q.text }}</h4>
+    <div class="contenedor-pregunta" *ngFor="let q of quiz.questions">
+      <h4 class="texto-quiz">{{ q.text }}</h4>
 
       <div *ngFor="let opt of q.options">
-        <label>
+        <label class="input-quiz">
           <input
             type="radio"
             [name]="'question-' + q.id"
@@ -34,7 +34,7 @@
     {{ result.totalQuestions }}
   </p>
 
-  <button class="btn btn-secondary" routerLink="/quizzes">
+  <button class="btn btn-secondary boton-quiz" routerLink="/quizzes">
     Volver a los cuestionarios
   </button>
 </div>

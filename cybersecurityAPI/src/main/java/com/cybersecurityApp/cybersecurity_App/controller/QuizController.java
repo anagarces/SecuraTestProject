@@ -3,6 +3,7 @@ package com.cybersecurityApp.cybersecurity_App.controller;
 import com.cybersecurityApp.cybersecurity_App.model.Quiz;
 import com.cybersecurityApp.cybersecurity_App.model.dao.QuizDao;
 import com.cybersecurityApp.cybersecurity_App.model.dto.QuizDetailDTO;
+import com.cybersecurityApp.cybersecurity_App.model.dto.QuizSummaryDTO;
 import com.cybersecurityApp.cybersecurity_App.model.dto.dtomapper.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,11 @@ public class QuizController {
     private DTOMapper dtoMapper;
 
     @GetMapping
-    public List<Quiz> getAll() {
-        return quizDao.findAll();
+    public List<QuizSummaryDTO> getAll() {
+        return quizDao.findAll()
+                .stream()
+                .map(dtoMapper::toQuizSummaryDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -34,17 +38,17 @@ public class QuizController {
     }
 
     @PostMapping
-    public Quiz create(@RequestBody Quiz quiz) {
-        return quizDao.save(quiz);
+    public QuizSummaryDTO create(@RequestBody Quiz quiz) {
+        return dtoMapper.toQuizSummaryDTO(quizDao.save(quiz));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Quiz> update(@PathVariable Long id, @RequestBody Quiz quizData) {
+    public ResponseEntity<QuizSummaryDTO> update(@PathVariable Long id, @RequestBody Quiz quizData) {
         return quizDao.findById(id)
                 .map(quiz -> {
                     quiz.setTitle(quizData.getTitle());
                     quiz.setDescription(quizData.getDescription());
-                    return ResponseEntity.ok(quizDao.save(quiz));
+                    return ResponseEntity.ok(dtoMapper.toQuizSummaryDTO(quizDao.save(quiz)));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

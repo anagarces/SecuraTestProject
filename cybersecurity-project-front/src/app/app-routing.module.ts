@@ -8,6 +8,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register/register.component';
 import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
 import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
+import { MisResultadosComponent } from './pages/mis-resultados/mis-resultados.component';
 
 const routes: Routes = [
 
@@ -33,10 +34,20 @@ const routes: Routes = [
     component: ContentDetailComponent
   },
 
-  { path: 'quizzes', component: QuizListComponent },
+  {
+    path: 'quizzes',
+    canActivate: [AuthGuard],
+    component: QuizListComponent
+  },
 
   //Muestra un cuestionario
-  { path: 'quiz/:id', component: QuizTakeComponent },
+  {
+    path: 'quiz/:id',
+    canActivate: [AuthGuard],
+    component: QuizTakeComponent
+  },
+
+  { path: 'mis-resultados', canActivate: [AuthGuard], component: MisResultadosComponent },
 
    // 5. Redirige cualquier ruta no encontrada a la página de inicio.
   // Esta debe ser SIEMPRE la última ruta de la lista.

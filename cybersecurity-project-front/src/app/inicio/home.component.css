@@ -1,5 +1,5 @@
 h1{
-    font-size: 35px;
+    font-size: 40px;
 }
 
 h2{
@@ -27,7 +27,7 @@ h2{
     /*border: 0px solid rgba(39, 39, 230, 0.158);*/
     border-radius: 4px;
     padding: 15px;
-    margin: 30px 20px;
+    margin: 50px 20px;
     text-align: justify;
     background-color: rgba(111, 111, 218, 0.164);
     color: rgb(23, 23, 26);
@@ -35,8 +35,9 @@ h2{
 
 .texto-titulo-enlace{
     text-align: center;
-    font-size: 30px;
+    font-size: 35px;
     margin-top: 50px;
+    margin-bottom: 50px;
     color: rgb(29, 29, 97);
 }
 
@@ -46,11 +47,13 @@ h2{
 
 .boton-registrar{
     font-size: 20px;
+    color: rgb(5, 5, 43);
 }
 
 .seccion-registrar{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     gap: 8px;
     margin-left: 40px;
     margin-top: 50px;
@@ -63,5 +66,10 @@ h2{
 }
 
 .parrafo-container-inicio{
-    margin: 20px 35px;
+    margin: 25px 50px;
+    font-size: 20px;
+}
+
+.parrafo-pon-prueba{
+    margin-bottom: 80px;
 }

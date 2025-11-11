@@ -1,24 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Quiz } from '../model/quiz';
+import { QuizSummary } from '../model/quiz-summary';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
 
-  private baseUrl = 'http://localhost:8080/api/quizzes';
-
   private apiUrl = 'http://localhost:8080/api/quizzes';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getAllQuizzes(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
   }
 
-  getQuizById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getAllQuizzes(): Observable<QuizSummary[]> {
+     return this.http.get<QuizSummary[]>(this.apiUrl, { headers: this.getAuthHeaders() });
+  }
+
+  getQuizById(id: number): Observable<Quiz> {
+   return this.http.get<Quiz>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+  }
+
+    submitQuiz(quizId: number, respuestas: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${quizId}/submit`, respuestas, { headers: this.getAuthHeaders() });
   }
 }

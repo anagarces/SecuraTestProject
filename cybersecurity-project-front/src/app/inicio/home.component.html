@@ -8,16 +8,10 @@
       Tú eres la clave de nuestra seguridad.
     </h1>
 
-    <p class="mb-6 text-lg font-normal lg:text-xl sm:px-16  titulo-parrafo-hero">
+    <p class="mb-6 text-lg font-normal lg:text-xl sm:px-16 titulo-parrafo-hero">
       Bienvenido/a a la nueva herramienta de refuerzo en ciberseguridad de
-      <span id="app-title">SecuraTest</span>. Nuestro objetivo es simple:
-      proporcionarte la información que necesitas para protegerte a ti y a la
-      compañía de forma eficaz. En esta aplicación encontrarás guías rápidas y
-      las últimas alertas de seguridad. Te animamos a explorar el contenido y a
-      realizar las actividades propuestas para fortalecer nuestra cultura de
-      seguridad.
+      <span id="app-title">SecuraTest</span>.
     </p>
-
     <a
       routerLink="/login"
       class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
@@ -44,54 +38,127 @@
 <!----FIN CABECERA-->
 <br /><br />
 
-<div class="seccion-parrafos">
-  <div class="seccion-texto">
-    <!----PRIMERA SECCION-->
-    <h2 class="text-4xl font-extrabold dark:text-white">
-      El Factor Humano. Nuestra Primera Línea de Defensa.
-    </h2>
-    <p class="mb-4 text-lg font-normal text-white-500 dark:text-white-400 contenido-parrafo">
-      La ciberseguridad ya no es solo cosa de TI. Es una responsabilidad de
-      todos. Accede a nuestra plataforma y domina las tácticas para identificar
-      el phishing, prevenir fugas de datos y proteger la reputación de nuestro
-      departamento. Tu conocimiento es nuestro mejor firewall.
-    </p>
-  </div>
-
-  <div class="seccion-texto">
-    <!---SEGUNDA SECCION-->
-    <h2 class="text-4xl font-extrabold dark:text-white">
-      Artículos que te Hacen Pensar como un Hacker.
-    </h2>
-    <p class="mb-4 text-lg font-normal text-white-500 dark:text-white-400 contenido-parrafo">
-      SecuraTest es una biblioteca de artículos y guías de ciberseguridad,
-      breves y actualizados, diseñados específicamente para las necesidades del
-      departamento. Desde la gestión de contraseñas hasta la detección de
-      amenazas avanzadas, te damos el conocimiento que necesitas para navegar y
-      trabajar sin riesgo.
-    </p>
-  </div>
+<!---PARRAFO PON A PRUEBA-->
+<div class="parrafo-pon-prueba">
+  <h2 class="text-4xl font-extrabold dark:text-white texto-titulo-enlace">
+    Pon a prueba tus conocimientos
+  </h2>
+  <p
+    class="mb-4 text-lg font-normal text-gray-700 dark:text-gray-400 parrafo-container-inicio"
+  >
+    ¿Crees que puedes identificar un phishing? Demuéstralo. Nuestra sección de
+    <span id="cuestionario-texto">Cuestionarios Interactivos</span> está
+    diseñada para medir tu nivel de seguridad actual y detectar rápidamente tus
+    puntos débiles. No es solo un examen, es un entrenamiento dinámico para que
+    sepas exactamente dónde enfocar tu próxima mejora.
+  </p>
 </div>
 
-<div>
-     <h2 class="text-4xl font-extrabold dark:text-white texto-titulo-enlace">
-      Pon a prueba tus conocimientos
-    </h2>
- <p class="mb-4 text-lg font-normal text-gray-700 dark:text-gray-400 parrafo-container-inicio">
-   ¿Crees que puedes identificar un phishing? Demuéstralo. Nuestra sección de <span id="cuestionario-texto">Cuestionarios 
-   Interactivos</span> está diseñada para medir tu nivel de seguridad actual y detectar
-    rápidamente tus puntos débiles. No es solo un examen, es un entrenamiento 
-   dinámico para que sepas exactamente dónde enfocar tu próxima mejora.
-     </p>  
-</div>
-  <div class="seccion-registrar">
-       <a
-      routerLink="/register"
-      class="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition duration-150 boton-registrar"
+<!---INICIO DE PARRAFOS-->
+<!-- Acordeón adaptado a tus secciones -->
+<div id="accordion-cyber" data-accordion="open">
+  <!-- 1️⃣ PRIMERA SECCIÓN -->
+  <h2 id="accordion-cyber-heading-1">
+    <button
+      type="button"
+      class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-900 bg-gray-100 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+      data-accordion-target="#accordion-cyber-body-1"
+      aria-expanded="true"
+      aria-controls="accordion-cyber-body-1"
     >
-      Regístrate aquí</a>
-      <p class="mb-4 text-lg font-normal text-gray-700 dark:text-gray-400">
-      y empieza hoy a fortalecer la primera línea de defensa de nuestra empresa: tú mismo.
-    </p>
+      <span class="text-2xl font-bold dark:text-white">
+        El Factor Humano. Nuestra Primera Línea de Defensa.
+      </span>
+      <svg
+        data-accordion-icon
+        class="w-3 h-3 shrink-0 rotate-180"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 10 6"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5 5 1 1 5"
+        />
+      </svg>
+    </button>
+  </h2>
+  <div id="accordion-cyber-body-1" aria-labelledby="accordion-cyber-heading-1">
+    <div
+      class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900"
+    >
+      <p
+        class="mb-4 text-lg font-normal text-gray-700 dark:text-white-400 contenido-parrafo"
+      >
+        La ciberseguridad ya no es solo cosa de TI. Es una responsabilidad de
+        todos. Accede a nuestra plataforma y domina las tácticas para
+        identificar el phishing, prevenir fugas de datos y proteger la
+        reputación de nuestro departamento. Tu conocimiento es nuestro mejor
+        firewall.
+      </p>
+    </div>
   </div>
-  
+
+  <!-- 2️⃣ SEGUNDA SECCIÓN -->
+  <h2 id="accordion-cyber-heading-2">
+    <button
+      type="button"
+      class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+      data-accordion-target="#accordion-cyber-body-2"
+      aria-expanded="false"
+      aria-controls="accordion-cyber-body-2"
+    >
+      <span class="text-2xl font-bold dark:text-white">
+        Artículos que te Hacen Pensar como un Hacker.
+      </span>
+      <svg
+        data-accordion-icon
+        class="w-3 h-3 shrink-0"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 10 6"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5 5 1 1 5"
+        />
+      </svg>
+    </button>
+  </h2>
+  <div
+    id="accordion-cyber-body-2"
+    class="hidden"
+    aria-labelledby="accordion-cyber-heading-2"
+  >
+    <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
+      <p
+        class="mb-4 text-lg font-normal text-gray-700 dark:text-white-400 contenido-parrafo"
+      >
+        SecuraTest es una biblioteca de artículos y guías de ciberseguridad,
+        breves y actualizados, diseñados específicamente para las necesidades
+        del departamento. Desde la gestión de contraseñas hasta la detección de
+        amenazas avanzadas, te damos el conocimiento que necesitas para navegar
+        y trabajar sin riesgo.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="seccion-registrar">
+  <a
+    routerLink="/register"
+    class="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition duration-150 boton-registrar"
+  >
+    Regístrate aquí</a
+  >
+  <p class="mb-4 text-lg font-normal text-gray-700 dark:text-gray-400">
+    y empieza hoy a fortalecer la primera línea de defensa de nuestra empresa:
+    tú mismo.
+  </p>
+</div>

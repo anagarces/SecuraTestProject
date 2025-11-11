@@ -11,11 +11,10 @@ import { SubmissionService } from 'src/app/services/submission.service';
   templateUrl: './quiz-take.component.html',
   styleUrls: ['./quiz-take.component.css']
 })
-export class QuizTakeComponent implements OnInit{
-quiz: any; // Cuestionario cargado desde el backend
+export class QuizTakeComponent implements OnInit {
+  quiz: Quiz | null = null; // Cuestionario cargado desde el backend
   answers: { [questionId: number]: number } = {}; // Respuestas seleccionadas por el usuario
-  result: any = null; // Resultado del envío (score)
-  userId: number = 1; // ⚠️ Cambia esto cuando obtengas el ID real del usuario logueado
+  result: SubmissionResponse | null = null; // Resultado del envío (score)
 
   constructor(
     private route: ActivatedRoute,
@@ -42,13 +41,14 @@ quiz: any; // Cuestionario cargado desde el backend
       return;
     }
 
-    const submission = {
-      userId: this.userId,
+    const answers: SubmissionAnswer[] = Object.keys(this.answers).map(qId => ({
+      questionId: Number(qId),
+      optionId: this.answers[Number(qId)]
+    }));
+
+    const submission: SubmissionRequest = {
       quizId: this.quiz.id,
-      answers: Object.keys(this.answers).map(qId => ({
-        questionId: Number(qId),
-        optionId: this.answers[Number(qId)]
-      }))
+      answers
     };
 
     console.log('Enviando submission:', submission);
