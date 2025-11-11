@@ -9,4 +9,6 @@ public interface SubmissionDao extends JpaRepository<Submission, Long> {
 
     List<Submission> findByUserId(Long userId);
     List<Submission> findByQuizId(Long quizId);
+    List<Submission> findByUserIdOrderBySubmittedAtDesc(Long userId);
+
 }

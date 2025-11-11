@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SubmissionRequest, SubmissionResponse } from '../model/submission';
+import { SubmissionSummary } from '../model/submission-summary';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
@@ -21,6 +22,11 @@ export class SubmissionService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.post<SubmissionResponse>(this.baseUrl, submission, { headers });
+  }
+
+   getMySubmissions(): Observable<SubmissionSummary[]> {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${this.authService.getToken()}` });
+    return this.http.get<SubmissionSummary[]>(`${this.baseUrl}/my`, { headers });
   }
 
 }

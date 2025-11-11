@@ -1,0 +1,35 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4 dark:text-white">Mis resultados</h2>
+
+  <div *ngIf="cargando" class="text-gray-500 dark:text-gray-400">Cargando...</div>
+  <div *ngIf="error" class="text-red-600">{{ error }}</div>
+
+  <div *ngIf="!cargando && resultados.length === 0" class="text-gray-500 dark:text-gray-400">
+    Aún no has completado ningún cuestionario.
+  </div>
+
+  <div class="space-y-3" *ngIf="!cargando && resultados.length > 0">
+    <div *ngFor="let r of resultados" class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold dark:text-white">
+            {{ r.quizTitle || ('Cuestionario #' + r.quizId) }}
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Enviado: {{ r.submittedAt | date:'short' }} • Finalizado: {{ r.finishedAt | date:'short' }}
+          </p>
+        </div>
+        <div class="text-right">
+          <div class="text-xl font-bold dark:text-white">
+            {{ r.score }}/{{ r.totalQuestions }} ({{ porcentaje(r) }}%)
+          </div>
+          <a *ngIf="r.quizId"
+             [routerLink]="['/quizzes', r.quizId]"
+             class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+            Ver cuestionario
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

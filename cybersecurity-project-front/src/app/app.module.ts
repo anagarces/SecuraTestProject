@@ -25,6 +25,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './services/jwt.interceptor';
 import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
 import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
+import { MisResultadosComponent } from './pages/mis-resultados/mis-resultados.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component
     RegisterComponent,
     QuizListComponent,
     QuizTakeComponent,
+    MisResultadosComponent,
   
   ],
   imports: [
