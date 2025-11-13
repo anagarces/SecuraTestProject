@@ -11,6 +11,7 @@
  import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
  import org.springframework.security.config.Customizer;
  import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+ import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
  import org.springframework.security.config.annotation.web.builders.HttpSecurity;
  import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
  import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,6 +26,7 @@
  //ingresadas por el usuario con la contrasena guardada en la bbdd, gestion de sesion, acceso a endpoints...
  @Configuration
  @EnableWebSecurity
+ @EnableMethodSecurity
  public class SecurityConfig {
 
      private final UserDetailsService userDetailsService;
@@ -81,6 +83,7 @@
                          .requestMatchers("/api/auth/**").permitAll()
                          .requestMatchers("/api/quizzes/**").authenticated()
                          .requestMatchers("/api/submissions/**").authenticated()
+                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                          .anyRequest().authenticated()
                  );
 

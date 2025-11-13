@@ -29,28 +29,29 @@ public class JwtService {
     /* Recibe el objeto Authentication que prueba que el usuario ha iniciado sesión con éxito */
     public String generateToken(Authentication authentication) {
 
-        // Obtenemos los detalles del usuario autenticado
-        Object principal = authentication.getPrincipal();
-        String email = authentication.getName(); // el email siempre es el "subject" del token
-        String role = "USER"; // valor por defecto
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Si el objeto principal es nuestra entidad Usuario, extraemos el rol real
-        if (principal instanceof Usuario usuario) {
-            role = usuario.getRole().name(); // USER o ADMIN
-        }
+        // Ejemplo: ROLE_ADMIN o ROLE_USER
+        String fullRole = userDetails.getAuthorities()
+                .iterator()
+                .next()
+                .getAuthority();
 
-        // Creamos un mapa con claims adicionales
+        // Convertir a ADMIN o USER
+        String role = fullRole.replace("ROLE_", "");
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(email) // establece el sujeto del token (el email)
-                .setIssuedAt(new Date(System.currentTimeMillis())) // fecha de emisión
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24h
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // firma con clave secreta
-                .compact(); // finaliza y produce la cadena JWT
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
+
 
     /* Extrae el email del usuario del payload del token */
     public String extractUsername(String token) {

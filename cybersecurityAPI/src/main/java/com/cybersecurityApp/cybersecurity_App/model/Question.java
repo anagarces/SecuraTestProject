@@ -19,7 +19,7 @@ public class Question { //representa una pregunta del quiz
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OptionItem> options;
 
     public Question(){}

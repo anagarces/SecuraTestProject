@@ -9,6 +9,11 @@ import { RegisterComponent } from './register/register/register.component';
 import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
 import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
 import { MisResultadosComponent } from './pages/mis-resultados/mis-resultados.component';
+import { AdminQuizListComponent } from './admin/admin-quiz-list/admin-quiz-list.component';
+import { AdminQuizCreateComponent } from './admin/admin-quiz-create/admin-quiz-create.component';
+import { AdminQuizEditComponent } from './admin/admin-quiz-edit/admin-quiz-edit.component';
+import { AdminResultsComponent } from './admin/admin-results/admin-results.component';
+import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
 
@@ -48,6 +53,28 @@ const routes: Routes = [
   },
 
   { path: 'mis-resultados', canActivate: [AuthGuard], component: MisResultadosComponent },
+
+  {
+  path: 'admin/quizzes',
+  component: AdminQuizListComponent,
+  canActivate: [AdminGuard]
+},
+{
+  path: 'admin/quizzes/create',
+  component: AdminQuizCreateComponent,
+  canActivate: [AdminGuard]
+},
+{
+  path: 'admin/quizzes/edit/:id',
+  component: AdminQuizEditComponent,
+  canActivate: [AdminGuard]
+},
+{
+  path: 'admin/results',
+  component: AdminResultsComponent,
+  canActivate: [AdminGuard]
+},
+
 
    // 5. Redirige cualquier ruta no encontrada a la página de inicio.
   // Esta debe ser SIEMPRE la última ruta de la lista.

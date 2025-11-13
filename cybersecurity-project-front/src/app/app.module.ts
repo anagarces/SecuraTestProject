@@ -26,6 +26,10 @@ import { JwtInterceptor } from './services/jwt.interceptor';
 import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
 import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
 import { MisResultadosComponent } from './pages/mis-resultados/mis-resultados.component';
+import { AdminQuizListComponent } from './admin/admin-quiz-list/admin-quiz-list.component';
+import { AdminQuizCreateComponent } from './admin/admin-quiz-create/admin-quiz-create.component';
+import { AdminQuizEditComponent } from './admin/admin-quiz-edit/admin-quiz-edit.component';
+import { AdminResultsComponent } from './admin/admin-results/admin-results.component';
 
 
 @NgModule({
@@ -39,6 +43,10 @@ import { MisResultadosComponent } from './pages/mis-resultados/mis-resultados.co
     QuizListComponent,
     QuizTakeComponent,
     MisResultadosComponent,
+    AdminQuizListComponent,
+    AdminQuizCreateComponent,
+    AdminQuizEditComponent,
+    AdminResultsComponent,
   
   ],
   imports: [

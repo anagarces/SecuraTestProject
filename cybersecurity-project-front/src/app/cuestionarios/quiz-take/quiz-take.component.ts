@@ -47,9 +47,10 @@ export class QuizTakeComponent implements OnInit {
     }));
 
     const submission: SubmissionRequest = {
-      quizId: this.quiz.id,
-      answers
-    };
+  quizId: this.quiz!.id!,   // ⬅️ Corregido con non-null assertion
+  answers
+};
+
 
     console.log('Enviando submission:', submission);
 
