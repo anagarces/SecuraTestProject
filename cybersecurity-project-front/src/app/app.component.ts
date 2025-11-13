@@ -9,17 +9,19 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'cybersecurity-project';
+  adminMenuOpen = false;
 
    constructor(public authService: AuthService, private router: Router) {}
 
    //cerrar sesion
-     logout(): void {
+ logout(): void {
+  this.authService.logout(); // ← esto YA limpia todo y navega
+}
 
-      //llama al metodo del servicio para limpiar el token
-    this.authService.logout();
 
-    //redirige al usuario al login/inicio
-      this.router.navigate(['/']);
-  }
+toggleAdminMenu() {
+  this.adminMenuOpen = !this.adminMenuOpen;
+}
+
 
 }

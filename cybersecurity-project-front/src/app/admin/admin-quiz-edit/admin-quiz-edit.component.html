@@ -1,0 +1,19 @@
+<div class="max-w-xl mx-auto mt-10" *ngIf="quiz">
+  <h1 class="text-3xl font-bold mb-6 text-white">Editar Cuestionario</h1>
+
+  <label class="block mb-2 text-gray-300">Título</label>
+  <input [(ngModel)]="quiz.title" class="w-full mb-4 p-2 text-black rounded" />
+
+  <label class="block mb-2 text-gray-300">Descripción</label>
+  <textarea
+    [(ngModel)]="quiz.description"
+    class="w-full mb-4 p-2 text-black rounded"
+  ></textarea>
+
+  <button
+    (click)="saveChanges()"
+    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+  >
+    💾 Guardar Cambios
+  </button>
+</div>

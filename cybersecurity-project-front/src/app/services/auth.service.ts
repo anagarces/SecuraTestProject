@@ -35,12 +35,12 @@ export class AuthService {
     /**
    * Cierra la sesión del usuario.
    */
-  logout(): void {
-    // Simplemente borramos el token del almacenamiento
-    localStorage.removeItem('auth_token');
-    // Y redirigimos al usuario a la página de login
-    this.router.navigate(['/login']);
-  }
+ logout(): void {
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('user_role');
+  this.router.navigate(['/login']);
+}
+
 
     /**
    * Obtiene el token guardado.
@@ -73,6 +73,15 @@ export class AuthService {
     // Hacemos la petición a la ruta protegida, pasando las cabeceras.
     return this.http.get(`${this.contentApiUrl}/getAll`, { headers: headers });
   }
+
+  getRole(): string | null {
+  return localStorage.getItem('user_role');
+}
+
+isAdmin(): boolean {
+  return this.getRole() === 'ADMIN';
+}
+
 
 }
 

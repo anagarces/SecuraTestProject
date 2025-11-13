@@ -1,0 +1,42 @@
+<div class="max-w-4xl mx-auto mt-10">
+  <h1 class="text-3xl font-bold mb-6 text-white">Gestión de Cuestionarios</h1>
+
+  <button
+    (click)="createQuiz()"
+    class="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+  >
+    ➕ Crear nuevo cuestionario
+  </button>
+
+  <table class="w-full text-left text-sm text-gray-300">
+    <thead class="bg-gray-800 text-gray-200">
+      <tr>
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">Título</th>
+        <th class="px-4 py-2">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let quiz of quizzes" class="border-b border-gray-700">
+        <td class="px-4 py-3">{{ quiz.id }}</td>
+        <td class="px-4 py-3">{{ quiz.title }}</td>
+        <td class="px-4 py-3 space-x-2">
+          <button
+            (click)="editQuiz(quiz.id!)"
+            class="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded"
+          >
+            ✏️ Editar
+          </button>
+
+          <button
+            (click)="deleteQuiz(quiz.id!)"
+            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+          >
+            🗑 Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

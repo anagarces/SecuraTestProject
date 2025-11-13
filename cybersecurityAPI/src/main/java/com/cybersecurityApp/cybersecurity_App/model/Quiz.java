@@ -21,7 +21,7 @@ public class Quiz {
     @Column(name = "is_published")
     private boolean isPublished;
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
     public Quiz(Long id) {
