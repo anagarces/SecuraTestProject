@@ -16,6 +16,7 @@ export class AdminQuizService {
     const token = localStorage.getItem('auth_token');
     return {
       headers: new HttpHeaders({
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       })
     };

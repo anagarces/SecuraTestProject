@@ -15,37 +15,39 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 // Clase que gestiona la lógica del JWT
 // Responsable de crear, leer y validar los tokens
 @Service
 public class JwtService {
 
-    // Inyectamos el valor de nuestra clave secreta desde application.properties
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
 
-    /* Recibe el objeto Authentication que prueba que el usuario ha iniciado sesión con éxito */
+
+    /* =============================
+       GENERAR TOKEN JWT
+       ============================= */
     public String generateToken(Authentication authentication) {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Ejemplo: ROLE_ADMIN o ROLE_USER
+        // Spring Security da algo como: ROLE_ADMIN o ROLE_USER
         String fullRole = userDetails.getAuthorities()
                 .iterator()
                 .next()
-                .getAuthority();
+                .getAuthority(); // ROLE_ADMIN
 
-        // Convertir a ADMIN o USER
+        // Convertimos a ADMIN o USER
         String role = fullRole.replace("ROLE_", "");
 
+        // Insertamos el rol en "role" porque así lo necesita ANGULAR y nuestras reglas @PreAuthorize
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getUsername()) // email
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -53,35 +55,30 @@ public class JwtService {
     }
 
 
-    /* Extrae el email del usuario del payload del token */
+    /* =============================
+       LEER DATOS DEL TOKEN
+       ============================= */
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    /* Extrae el rol desde el token */
     public String extractRole(String token) {
         return extractAllClaims(token).get("role", String.class);
     }
 
-    /* Verifica si el token es usable */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    // Comprueba si la fecha de expiración del token es anterior a la hora actual
+
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    /* Utilidad para extraer cualquier claim específico (por ej. el sujeto o la expiración) */
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    private <T> T extractClaim(String token, java.util.function.Function<Claims, T> resolver) {
+        return resolver.apply(extractAllClaims(token));
     }
 
     private Claims extractAllClaims(String token) {
@@ -92,9 +89,9 @@ public class JwtService {
                 .getBody();
     }
 
-    // Convierte la secret key en un objeto de tipo Key que la librería JJWT puede usar internamente
+
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        byte[] bytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(bytes);
     }
 }

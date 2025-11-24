@@ -1,13 +1,15 @@
 package com.cybersecurityApp.cybersecurity_App.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "question")
-public class Question { //representa una pregunta del quiz
+@Table(name = "questions")
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,25 +18,15 @@ public class Question { //representa una pregunta del quiz
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "quiz_id", nullable = false)
+    @JsonBackReference("quiz-questions")
     private Quiz quiz;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OptionItem> options;
+    @JsonManagedReference("question-options")
+    private List<OptionItem> options = new ArrayList<>();
 
-    public Question(){}
-
-    public Question(Long id) {
-        this.id = id;
-
-    }
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
+    // getters y setters
 
     public Long getId() {
         return id;
@@ -42,6 +34,14 @@ public class Question { //representa una pregunta del quiz
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Quiz getQuiz() {

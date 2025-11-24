@@ -1,6 +1,7 @@
 package com.cybersecurityApp.cybersecurity_App.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -11,32 +12,24 @@ import java.util.List;
 @Table(name = "quiz")
 public class Quiz {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    private String title;
-    private String description;
+        private String title;
 
-    @Column(name = "is_published")
-    private boolean isPublished;
+        private String description;
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
+        private boolean published = false;
 
-    public Quiz(Long id) {
-        this.id = id;
-    }
 
-    public List<Question> getQuestions() {
-        return questions;
-    }
+        @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+        @JsonManagedReference("quiz-questions")
+        private List<Question> questions = new ArrayList<>();
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
 
-    public Quiz() {}
+    // getters y setters
+
     public Long getId() {
         return id;
     }
@@ -62,10 +55,21 @@ public class Quiz {
     }
 
     public boolean isPublished() {
-        return isPublished;
+        return published;
     }
 
     public void setPublished(boolean published) {
-        isPublished = published;
+        this.published = published;
     }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
 }
+
+

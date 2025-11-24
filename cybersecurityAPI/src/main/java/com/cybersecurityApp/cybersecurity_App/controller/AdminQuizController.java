@@ -30,8 +30,23 @@ public class AdminQuizController {
 
     @PostMapping
     public Quiz createQuiz(@RequestBody Quiz quiz) {
+
+        // Establecer la relación padre-hijo antes de guardar
+        if (quiz.getQuestions() != null) {
+            for (Question q : quiz.getQuestions()) {
+                q.setQuiz(quiz);
+
+                if (q.getOptions() != null) {
+                    for (OptionItem opt : q.getOptions()) {
+                        opt.setQuestion(q);
+                    }
+                }
+            }
+        }
+
         return quizDao.save(quiz);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Quiz> updateQuiz(@PathVariable Long id, @RequestBody Quiz data) {
@@ -77,6 +92,11 @@ public class AdminQuizController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public List<Quiz> getAllQuizzes() {
+        return quizDao.findAll();
+    }
+
     // =======================
     // CRUD de OPCIONES
     // =======================
@@ -105,4 +125,12 @@ public class AdminQuizController {
         optionItemDao.deleteById(optionId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/debug")
+    public String debugAuth(org.springframework.security.core.Authentication auth) {
+        System.out.println("AUTH = " + auth);
+        System.out.println("AUTHORITIES = " + auth.getAuthorities());
+        return "OK";
+    }
+
 }

@@ -1,19 +1,102 @@
-<div class="max-w-xl mx-auto mt-10" *ngIf="quiz">
-  <h1 class="text-3xl font-bold mb-6 text-white">Editar Cuestionario</h1>
+<div
+  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded"
+>
+  <h1 class="text-2xl font-bold mb-6 dark:text-white">Editar cuestionario</h1>
 
-  <label class="block mb-2 text-gray-300">Título</label>
-  <input [(ngModel)]="quiz.title" class="w-full mb-4 p-2 text-black rounded" />
+  <form *ngIf="!loading" [formGroup]="quizForm">
+    <!-- Título -->
+    <label class="block font-semibold dark:text-white">Título</label>
+    <input
+      type="text"
+      formControlName="title"
+      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-4"
+    />
 
-  <label class="block mb-2 text-gray-300">Descripción</label>
-  <textarea
-    [(ngModel)]="quiz.description"
-    class="w-full mb-4 p-2 text-black rounded"
-  ></textarea>
+    <!-- Descripción -->
+    <label class="block font-semibold dark:text-white">Descripción</label>
+    <textarea
+      formControlName="description"
+      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-6"
+    ></textarea>
+
+    <!-- Preguntas -->
+    <div formArrayName="questions">
+      <div
+        *ngFor="let q of questions.controls; let qi = index"
+        [formGroupName]="qi"
+        class="border rounded p-4 mb-6 dark:border-gray-600"
+      >
+        <div class="flex justify-between">
+          <h2 class="font-semibold dark:text-white">Pregunta {{ qi + 1 }}</h2>
+
+          <button
+            type="button"
+            class="text-red-500 hover:underline"
+            (click)="deleteQuestion(qi)"
+          >
+            Eliminar pregunta
+          </button>
+        </div>
+
+        <input
+          type="text"
+          formControlName="text"
+          class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mt-2 mb-4"
+        />
+
+        <!-- Opciones -->
+        <div formArrayName="options" class="ml-4">
+          <div
+            *ngFor="let opt of getOptions(qi).controls; let oi = index"
+            [formGroupName]="oi"
+            class="flex items-center mb-2 space-x-3"
+          >
+            <input
+              type="radio"
+              name="correct_{{ qi }}"
+              (change)="setCorrectOption(qi, oi)"
+              [checked]="opt.get('correct')?.value"
+            />
+
+            <input
+              type="text"
+              formControlName="text"
+              class="flex-1 p-2 border rounded dark:bg-gray-700 dark:text-white"
+            />
+
+            <button
+              type="button"
+              class="text-red-500 hover:underline"
+              (click)="deleteOption(qi, oi)"
+            >
+              X
+            </button>
+          </div>
+
+          <button
+            type="button"
+            (click)="addOption(qi)"
+            class="mt-2 px-3 py-1 bg-blue-600 text-white rounded"
+          >
+            + Agregar opción
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        (click)="addQuestion()"
+        class="px-4 py-2 bg-green-600 text-white rounded"
+      >
+        + Agregar pregunta
+      </button>
+    </div>
+  </form>
 
   <button
-    (click)="saveChanges()"
-    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+    (click)="saveQuiz()"
+    class="w-full mt-6 py-2 bg-green-700 text-white rounded"
   >
-    💾 Guardar Cambios
+    Guardar cambios
   </button>
 </div>
