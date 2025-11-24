@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminQuizService } from '../services/admin-quiz.service';
-import { Quiz } from '../../model/quiz';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-admin-quiz-edit',
@@ -10,14 +10,15 @@ import { Quiz } from '../../model/quiz';
 })
 export class AdminQuizEditComponent implements OnInit {
 
-  quizId!: number;
   quizForm!: FormGroup;
+  quizId!: number;
   loading = true;
 
   constructor(
-    private route: ActivatedRoute,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private adminQuizService: AdminQuizService,
+    private snackBar: MatSnackBar,
     private router: Router
   ) {}
 
@@ -26,69 +27,61 @@ export class AdminQuizEditComponent implements OnInit {
     this.loadQuiz();
   }
 
-  /* -------------------------------------------------------
-      CARGAR CUESTIONARIO EXISTENTE
-  ---------------------------------------------------------*/
-  loadQuiz(): void {
+  loadQuiz() {
     this.adminQuizService.getById(this.quizId).subscribe({
-      next: (quiz: Quiz) => {
+      next: quiz => {
         this.buildForm(quiz);
         this.loading = false;
       },
-      error: err => console.error('Error cargando quiz', err)
+      error: err => {
+        console.error(err);
+        this.snackBar.open('Error cargando el cuestionario', 'Cerrar', { duration: 2500 });
+      }
     });
   }
 
-  /* -------------------------------------------------------
-      CONSTRUIR FORMULARIO DINÁMICO
-  ---------------------------------------------------------*/
-  buildForm(quiz: Quiz): void {
+  buildForm(quiz: any) {
     this.quizForm = this.fb.group({
       title: [quiz.title, Validators.required],
       description: [quiz.description, Validators.required],
       questions: this.fb.array([])
     });
 
-    // Agregar preguntas existentes
-    quiz.questions.forEach(q => {
+    quiz.questions.forEach((q: any) => {
       const questionGroup = this.fb.group({
         id: [q.id],
         text: [q.text, Validators.required],
         options: this.fb.array([])
       });
 
-      this.questions.push(questionGroup);
-
-      // Agregar opciones
-      q.options.forEach(opt => {
+      q.options.forEach((opt: any) => {
         const optionGroup = this.fb.group({
           id: [opt.id],
           text: [opt.text, Validators.required],
-          isCorrect: [opt.correct]
+          correct: [opt.correct]   // 👈 coincide con backend
         });
 
-        this.getOptions(this.questions.length - 1).push(optionGroup);
+        (questionGroup.get('options') as FormArray).push(optionGroup);
       });
+
+      this.questions.push(questionGroup);
     });
   }
 
-  /* -------------------------------------------------------
-      GETTERS
-  ---------------------------------------------------------*/
+  // Getters
   get questions(): FormArray {
     return this.quizForm.get('questions') as FormArray;
   }
 
-  getOptions(qIndex: number): FormArray {
-    return this.questions.at(qIndex).get('options') as FormArray;
+  getOptions(qi: number): FormArray {
+    return this.questions.at(qi).get('options') as FormArray;
   }
 
-  /* -------------------------------------------------------
-      ACCIONES DINÁMICAS
-  ---------------------------------------------------------*/
+  // Agregar / eliminar
   addQuestion() {
     this.questions.push(
       this.fb.group({
+        id: [null],
         text: ['', Validators.required],
         options: this.fb.array([])
       })
@@ -96,43 +89,51 @@ export class AdminQuizEditComponent implements OnInit {
   }
 
   deleteQuestion(index: number) {
+    // Opción A: solo lo quitamos del formulario.
+    // El backend NO borrará la pregunta en BD.
     this.questions.removeAt(index);
   }
 
-  addOption(qIndex: number) {
-    this.getOptions(qIndex).push(
+  addOption(qi: number) {
+    this.getOptions(qi).push(
       this.fb.group({
+        id: [null],
         text: ['', Validators.required],
-        isCorrect: [false]
+        correct: [false]
       })
     );
   }
 
-  deleteOption(qIndex: number, optIndex: number) {
-    this.getOptions(qIndex).removeAt(optIndex);
+  deleteOption(qi: number, oi: number) {
+    // Igual que deleteQuestion: solo se quita del formulario.
+    this.getOptions(qi).removeAt(oi);
   }
 
-  setCorrectOption(qIndex: number, optIndex: number) {
-    const options = this.getOptions(qIndex);
-    options.controls.forEach((o, i) => {
-      o.get('isCorrect')?.setValue(i === optIndex);
+  setCorrectOption(qi: number, oi: number) {
+    const options = this.getOptions(qi);
+
+    options.controls.forEach((group, i) => {
+      group.get('correct')?.setValue(i === oi);
     });
   }
 
-  /* -------------------------------------------------------
-      GUARDAR CAMBIOS
-  ---------------------------------------------------------*/
-  saveQuiz(): void {
+  saveQuiz() {
     if (this.quizForm.invalid) {
-      alert('Completa todo el formulario.');
+      this.snackBar.open('Completa todos los campos', 'Cerrar', { duration: 2000 });
       return;
     }
 
-    this.adminQuizService.update(this.quizId, this.quizForm.value)
-      .subscribe(() => {
-        alert('Cuestionario actualizado correctamente');
+    const quizData = this.quizForm.value;
+
+    this.adminQuizService.update(this.quizId, quizData).subscribe({
+      next: () => {
+        this.snackBar.open('Cuestionario actualizado', 'OK', { duration: 2000 });
         this.router.navigate(['/admin/quizzes']);
-      });
+      },
+      error: err => {
+        console.error(err);
+        this.snackBar.open('Error al guardar', 'Cerrar', { duration: 2500 });
+      }
+    });
   }
 }
-

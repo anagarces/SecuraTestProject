@@ -15,6 +15,10 @@ public class OptionItem {
 
     private boolean correct;
 
+    // 🔹 NUEVO: marca lógica de borrado / archivado
+    @Column(nullable = false)
+    private boolean archived = false;
+
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     @JsonBackReference("question-options")
@@ -44,6 +48,14 @@ public class OptionItem {
 
     public void setCorrect(boolean correct) {
         this.correct = correct;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 
     public Question getQuestion() {

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminQuizService } from '../services/admin-quiz.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-admin-quiz-create',
@@ -14,27 +15,24 @@ export class AdminQuizCreateComponent {
   constructor(
     private fb: FormBuilder,
     private adminQuizService: AdminQuizService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
-
     this.quizForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      questions: this.fb.array([]) // array dinámico
+      questions: this.fb.array([])
     });
   }
 
-  // 🔹 Getter para preguntas
   get questions(): FormArray {
     return this.quizForm.get('questions') as FormArray;
   }
 
-  // 🔹 Getter para opciones
-  getOptions(questionIndex: number): FormArray {
-    return this.questions.at(questionIndex).get('options') as FormArray;
+  getOptions(qi: number): FormArray {
+    return this.questions.at(qi).get('options') as FormArray;
   }
 
-  // ➕ Agregar pregunta
   addQuestion() {
     const questionGroup = this.fb.group({
       text: ['', Validators.required],
@@ -44,38 +42,40 @@ export class AdminQuizCreateComponent {
     this.questions.push(questionGroup);
   }
 
-  // ➕ Agregar opción a una pregunta
-  addOption(questionIndex: number) {
+  addOption(qi: number) {
     const optionGroup = this.fb.group({
       text: ['', Validators.required],
-      isCorrect: [false]
+      correct: [false]   // 👈 ahora se llama 'correct'
     });
 
-    this.getOptions(questionIndex).push(optionGroup);
+    this.getOptions(qi).push(optionGroup);
   }
 
-  // ✔ Marcar una opción como correcta (solo una por pregunta)
-  setCorrectOption(questionIndex: number, optionIndex: number) {
-    const options = this.getOptions(questionIndex);
+  setCorrectOption(qi: number, oi: number) {
+    const options = this.getOptions(qi);
 
     options.controls.forEach((group, i) => {
-      group.get('isCorrect')?.setValue(i === optionIndex);
+      group.get('correct')?.setValue(i === oi);
     });
   }
 
-  // 💾 Guardar cuestionario
   saveQuiz() {
     if (this.quizForm.invalid) {
-      alert('Completa todos los campos antes de guardar.');
+      this.snackBar.open('Completa todos los campos antes de guardar.', 'Cerrar', { duration: 2500 });
       return;
     }
 
     const quizData = this.quizForm.value;
 
-    this.adminQuizService.create(quizData).subscribe(() => {
-      alert("Cuestionario creado correctamente");
-      this.router.navigate(['/admin/quizzes']);
+    this.adminQuizService.create(quizData).subscribe({
+      next: () => {
+        this.snackBar.open('Cuestionario creado correctamente', 'OK', { duration: 2000 });
+        this.router.navigate(['/admin/quizzes']);
+      },
+      error: err => {
+        console.error(err);
+        this.snackBar.open('Error al crear el cuestionario', 'Cerrar', { duration: 2500 });
+      }
     });
   }
 }
-

@@ -1,22 +1,23 @@
 <div
-  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded"
+  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded shadow"
 >
   <h1 class="text-2xl font-bold mb-6 dark:text-white">Editar cuestionario</h1>
 
+  <div *ngIf="loading" class="text-gray-400">Cargando...</div>
+
   <form *ngIf="!loading" [formGroup]="quizForm">
     <!-- Título -->
-    <label class="block font-semibold dark:text-white">Título</label>
+    <label class="font-semibold dark:text-white">Título</label>
     <input
-      type="text"
       formControlName="title"
-      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-4"
+      class="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:text-white"
     />
 
     <!-- Descripción -->
-    <label class="block font-semibold dark:text-white">Descripción</label>
+    <label class="font-semibold dark:text-white">Descripción</label>
     <textarea
       formControlName="description"
-      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-6"
+      class="w-full p-2 mb-6 border rounded dark:bg-gray-700 dark:text-white"
     ></textarea>
 
     <!-- Preguntas -->
@@ -24,24 +25,23 @@
       <div
         *ngFor="let q of questions.controls; let qi = index"
         [formGroupName]="qi"
-        class="border rounded p-4 mb-6 dark:border-gray-600"
+        class="border p-4 mb-4 rounded dark:border-gray-600"
       >
         <div class="flex justify-between">
-          <h2 class="font-semibold dark:text-white">Pregunta {{ qi + 1 }}</h2>
+          <h2 class="text-lg dark:text-white">Pregunta {{ qi + 1 }}</h2>
 
           <button
             type="button"
-            class="text-red-500 hover:underline"
             (click)="deleteQuestion(qi)"
+            class="text-red-600"
           >
-            Eliminar pregunta
+            Eliminar
           </button>
         </div>
 
         <input
-          type="text"
           formControlName="text"
-          class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mt-2 mb-4"
+          class="w-full p-2 mb-3 border rounded dark:bg-gray-700 dark:text-white"
         />
 
         <!-- Opciones -->
@@ -49,25 +49,25 @@
           <div
             *ngFor="let opt of getOptions(qi).controls; let oi = index"
             [formGroupName]="oi"
-            class="flex items-center mb-2 space-x-3"
+            class="flex items-center mb-2"
           >
             <input
               type="radio"
-              name="correct_{{ qi }}"
-              (change)="setCorrectOption(qi, oi)"
+              name="edit_correctOption_{{ qi }}"
               [checked]="opt.get('correct')?.value"
+              (change)="setCorrectOption(qi, oi)"
+              class="mr-2"
             />
 
             <input
-              type="text"
               formControlName="text"
               class="flex-1 p-2 border rounded dark:bg-gray-700 dark:text-white"
             />
 
             <button
               type="button"
-              class="text-red-500 hover:underline"
               (click)="deleteOption(qi, oi)"
+              class="text-red-600 ml-2"
             >
               X
             </button>
@@ -95,7 +95,7 @@
 
   <button
     (click)="saveQuiz()"
-    class="w-full mt-6 py-2 bg-green-700 text-white rounded"
+    class="mt-6 w-full bg-green-700 text-white py-2 rounded"
   >
     Guardar cambios
   </button>

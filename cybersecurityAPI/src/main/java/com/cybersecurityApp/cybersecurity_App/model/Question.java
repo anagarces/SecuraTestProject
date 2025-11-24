@@ -22,7 +22,7 @@ public class Question {
     @JsonBackReference("quiz-questions")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @JsonManagedReference("question-options")
     private List<OptionItem> options = new ArrayList<>();
 
