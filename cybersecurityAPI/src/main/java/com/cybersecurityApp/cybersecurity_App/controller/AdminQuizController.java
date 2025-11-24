@@ -77,98 +77,46 @@ public class AdminQuizController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Quiz> updateQuiz(@PathVariable Long id, @RequestBody Quiz data) {
-        return quizDao.findById(id)
-                .map(existingQuiz -> {
 
-                    // 1) Actualizar datos básicos
-                    existingQuiz.setTitle(data.getTitle());
-                    existingQuiz.setDescription(data.getDescription());
+        return quizDao.findById(id).map(existingQuiz -> {
 
-                    // 2) Mapa de preguntas existentes (por id)
-                    Map<Long, Question> existingQuestionsById = existingQuiz.getQuestions()
-                            .stream()
-                            .filter(q -> q.getId() != null)
-                            .collect(Collectors.toMap(Question::getId, q -> q));
+            existingQuiz.setTitle(data.getTitle());
+            existingQuiz.setDescription(data.getDescription());
 
-                    // 3) Nueva lista de preguntas que quedarán asociadas al quiz
-                    List<Question> updatedQuestions = new ArrayList<>();
+            // LIMPIAR TODAS LAS PREGUNTAS ANTERIORES
+            existingQuiz.getQuestions().clear();
 
-                    if (data.getQuestions() != null) {
-                        for (Question incomingQ : data.getQuestions()) {
+            // RECONSTRUIR TODAS LAS NUEVAS
+            for (Question incomingQuestion : data.getQuestions()) {
 
-                            Question targetQ;
+                Question newQuestion = new Question();
+                newQuestion.setText(incomingQuestion.getText());
+                newQuestion.setQuiz(existingQuiz);
 
-                            // ¿Es una pregunta nueva o ya existe?
-                            if (incomingQ.getId() != null && existingQuestionsById.containsKey(incomingQ.getId())) {
-                                // Pregunta existente: actualizamos texto
-                                targetQ = existingQuestionsById.get(incomingQ.getId());
-                                targetQ.setText(incomingQ.getText());
-                            } else {
-                                // Pregunta nueva
-                                targetQ = new Question();
-                                targetQ.setText(incomingQ.getText());
-                                targetQ.setQuiz(existingQuiz);
-                            }
+                // OPCIONES → LIMPIAR Y RECONSTRUIR
+                List<OptionItem> newOptions = new ArrayList<>();
 
-                            // ===== Opciones =====
-                            Map<Long, OptionItem> existingOptionsById = targetQ.getOptions()
-                                    .stream()
-                                    .filter(o -> o.getId() != null)
-                                    .collect(Collectors.toMap(OptionItem::getId, o -> o));
+                for (OptionItem incomingOption : incomingQuestion.getOptions()) {
+                    OptionItem opt = new OptionItem();
+                    opt.setText(incomingOption.getText());
+                    opt.setCorrect(incomingOption.isCorrect());
+                    opt.setQuestion(newQuestion);
 
-                            // Marcaremos cuáles se han tocado para luego archivar las sobras
-                            Set<Long> touchedOptionIds = new HashSet<>();
+                    newOptions.add(opt);
+                }
 
-                            if (incomingQ.getOptions() != null) {
-                                for (OptionItem incomingOpt : incomingQ.getOptions()) {
+                newQuestion.setOptions(newOptions);
 
-                                    OptionItem targetOpt;
-                                    if (incomingOpt.getId() != null && existingOptionsById.containsKey(incomingOpt.getId())) {
-                                        // Opción existente: actualizar texto y bandera de correcta
-                                        targetOpt = existingOptionsById.get(incomingOpt.getId());
-                                    } else {
-                                        // Opción nueva
-                                        targetOpt = new OptionItem();
-                                        targetOpt.setQuestion(targetQ);
-                                        targetQ.getOptions().add(targetOpt);
-                                    }
+                existingQuiz.getQuestions().add(newQuestion);
+            }
 
-                                    targetOpt.setText(incomingOpt.getText());
-                                    targetOpt.setCorrect(incomingOpt.isCorrect());
-                                    // aseguramos que siga activa
-                                    targetOpt.setArchived(false);
+            Quiz saved = quizDao.save(existingQuiz);
+            return ResponseEntity.ok(saved);
 
-                                    if (targetOpt.getId() != null) {
-                                        touchedOptionIds.add(targetOpt.getId());
-                                    }
-                                }
-                            }
-
-                            //  Archivar las opciones que ya no llegan desde el front:
-                            for (OptionItem opt : targetQ.getOptions()) {
-                                if (opt.getId() != null &&
-                                        !touchedOptionIds.contains(opt.getId())) {
-                                    // En vez de borrar, las marcamos como archivadas
-                                    opt.setArchived(true);
-                                }
-                            }
-
-                            updatedQuestions.add(targetQ);
-                        }
-                    }
-
-                    // Asignar a la entidad original la lista actualizada
-                    existingQuiz.setQuestions(updatedQuestions);
-
-                    Quiz saved = quizDao.save(existingQuiz);
-
-                    // Limpiar opciones archivadas antes de devolver al front
-                    limpiarOpcionesArchivadas(saved);
-
-                    return ResponseEntity.ok(saved);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        }).orElse(ResponseEntity.notFound().build());
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuiz(@PathVariable Long id) {
