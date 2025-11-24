@@ -1,33 +1,30 @@
 package com.cybersecurityApp.cybersecurity_App.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "option_item")
-public class OptionItem { //representa una opcion de respuesta para una pregunta
+@Table(name = "options")
+public class OptionItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String text;
 
-    @Column(name = "is_correct")
-    private boolean isCorrect;
+    private boolean correct;
+
+    // 🔹 NUEVO: marca lógica de borrado / archivado
+    @Column(nullable = false)
+    private boolean archived = false;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
+    @JsonBackReference("question-options")
     private Question question;
 
-    public OptionItem(){}
-    public OptionItem(Long id) { this.id = id; }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
+    // getters y setters
 
     public Long getId() {
         return id;
@@ -37,12 +34,28 @@ public class OptionItem { //representa una opcion de respuesta para una pregunta
         this.id = id;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 
     public Question getQuestion() {

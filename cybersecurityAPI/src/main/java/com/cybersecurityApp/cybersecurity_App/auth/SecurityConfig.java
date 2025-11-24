@@ -80,15 +80,23 @@
                  .authenticationProvider(authenticationProvider())
                  .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                  .authorizeHttpRequests(auth -> auth
+
+                         // 1. ENDPOINTS PÚBLICOS
                          .requestMatchers("/api/auth/**").permitAll()
+
+                         // 2. ENDPOINTS SOLO PARA ADMIN
+                         // ⚠️ ESTO DEBE IR ANTES QUE CUALQUIER requestMatchers().authenticated()
+                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                         // 3. ENDPOINTS PROTEGIDOS NORMALES
                          .requestMatchers("/api/quizzes/**").authenticated()
                          .requestMatchers("/api/submissions/**").authenticated()
-                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                         //LO DEMÁS REQUIERE LOGIN
                          .anyRequest().authenticated()
                  );
 
-         // En el siguiente paso, añadiremos nuestro filtro JWT aquí
-
          return http.build();
      }
+
  }

@@ -21,7 +21,7 @@ export class AdminQuizListComponent implements OnInit {
     this.loadQuizzes();
   }
 
-  loadQuizzes() {
+  loadQuizzes(): void {
     this.adminQuizService.getAll().subscribe({
       next: data => {
         this.quizzes = data;
@@ -29,23 +29,25 @@ export class AdminQuizListComponent implements OnInit {
       },
       error: err => {
         console.error('Error cargando cuestionarios', err);
+        this.loading = false;
       }
     });
   }
 
-  createQuiz() {
+  createQuiz(): void {
     this.router.navigate(['/admin/quizzes/create']);
   }
 
-  editQuiz(id: number) {
-    this.router.navigate(['/admin/quizzes/edit', id]);
-  }
+editQuiz(id?: number) {
+  if (!id) return; 
+  this.router.navigate(['/admin/quizzes/edit', id]);
+}
 
-  deleteQuiz(id: number) {
-    if (!confirm('¿Seguro que deseas eliminar este cuestionario?')) return;
+deleteQuiz(id?: number) {
+  if (!id) return;
+  this.adminQuizService.delete(id).subscribe(() => {
+    this.loadQuizzes();
+  });
+}
 
-    this.adminQuizService.delete(id).subscribe(() => {
-      this.loadQuizzes();
-    });
-  }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
+import {jwtDecode} from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,11 @@ export class AppComponent {
   title = 'cybersecurity-project';
   adminMenuOpen = false;
 
-   constructor(public authService: AuthService, private router: Router) {}
+   constructor(public authService: AuthService, private router: Router) {
+    (window as any).jwtDecode = jwtDecode;
+}
+ 
+
 
    //cerrar sesion
  logout(): void {

@@ -5,10 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+
 //librerias interfaz
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 //Componentes de la app
 import { ContentComponent } from './contenido/content.component';
@@ -59,6 +61,7 @@ import { AdminResultsComponent } from './admin/admin-results/admin-results.compo
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
     ReactiveFormsModule
   ],
   providers: [
