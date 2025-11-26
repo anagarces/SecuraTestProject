@@ -32,6 +32,9 @@ import { AdminQuizListComponent } from './admin/admin-quiz-list/admin-quiz-list.
 import { AdminQuizCreateComponent } from './admin/admin-quiz-create/admin-quiz-create.component';
 import { AdminQuizEditComponent } from './admin/admin-quiz-edit/admin-quiz-edit.component';
 import { AdminResultsComponent } from './admin/admin-results/admin-results.component';
+import { AdminContenidoListComponent } from './admin/admin-contenido-list/admin-contenido-list.component';
+import { AdminContenidoCreateComponent } from './admin/admin-contenido-create/admin-contenido-create.component';
+import { AdminContenidoEditComponent } from './admin/admin-contenido-edit/admin-contenido-edit.component';
 
 
 @NgModule({
@@ -49,6 +52,9 @@ import { AdminResultsComponent } from './admin/admin-results/admin-results.compo
     AdminQuizCreateComponent,
     AdminQuizEditComponent,
     AdminResultsComponent,
+    AdminContenidoListComponent,
+    AdminContenidoCreateComponent,
+    AdminContenidoEditComponent,
   
   ],
   imports: [
