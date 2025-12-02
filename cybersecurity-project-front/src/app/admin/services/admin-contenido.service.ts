@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { IContenido } from 'src/app/model/contenido';
 
 @Injectable({ providedIn: 'root' })
 export class AdminContenidoService {
@@ -9,23 +10,24 @@ export class AdminContenidoService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.api);
+  getAll(): Observable<IContenido[]> {
+    return this.http.get<IContenido[]>(this.api);
   }
 
-  getById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.api}/${id}`);
+  getById(id: number): Observable<IContenido> {
+    return this.http.get<IContenido>(`${this.api}/${id}`);
   }
 
-  create(data: any): Observable<any> {
-    return this.http.post(this.api, data);
+  create(data: IContenido): Observable<IContenido> {
+    return this.http.post<IContenido>(this.api, data);
   }
 
-  update(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.api}/${id}`, data);
+  update(id: number, data: IContenido): Observable<IContenido> {
+    return this.http.put<IContenido>(`${this.api}/${id}`, data);
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
 }
+

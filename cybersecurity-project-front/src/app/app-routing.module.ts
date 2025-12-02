@@ -86,7 +86,7 @@ const routes: Routes = [
     { path: 'create', component: AdminContenidoCreateComponent },
     { path: 'edit/:id', component: AdminContenidoEditComponent }
   ]
-}
+},
 
 
 

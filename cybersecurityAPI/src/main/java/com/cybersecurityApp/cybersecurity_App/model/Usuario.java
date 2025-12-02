@@ -24,6 +24,9 @@ public class Usuario {
     @Column(nullable = false)
     private Role role = Role.USER; // por defecto usuario normal
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean active = true;
+
 //constructor vacio obligatorio para que el motor de persistencia JPA pueda crear objetos de esta clase
     public Usuario() {}
 
@@ -46,5 +49,13 @@ public class Usuario {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

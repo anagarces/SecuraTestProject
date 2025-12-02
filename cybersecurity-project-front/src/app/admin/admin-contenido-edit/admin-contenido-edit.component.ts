@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminContenidoService } from '../services/admin-contenido.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IContenido } from 'src/app/model/contenido';
 
 @Component({
   selector: 'app-admin-contenido-edit',
@@ -16,7 +17,7 @@ export class AdminContenidoEditComponent implements OnInit {
     titulo: ['', Validators.required],
     cuerpo: ['', Validators.required],
     tema: ['', Validators.required],
-    nivel_dificultad: ['', Validators.required]
+    nivelDificultad: ['', Validators.required]
   });
 
   loading = true;
@@ -34,7 +35,12 @@ export class AdminContenidoEditComponent implements OnInit {
 
     this.contenidoService.getById(this.contenidoId).subscribe({
       next: c => {
-        this.form.patchValue(c);
+        this.form.patchValue({
+          titulo: c.titulo,
+          cuerpo: c.cuerpo,
+          tema: c.tema,
+          nivelDificultad: c.nivelDificultad
+        });
         this.loading = false;
       },
       error: () => {
@@ -49,7 +55,16 @@ export class AdminContenidoEditComponent implements OnInit {
       return;
     }
 
-    this.contenidoService.update(this.contenidoId, this.form.value).subscribe({
+    
+    const contenidoActualizado: IContenido = {
+      idContenido: this.contenidoId,
+      titulo: this.form.value.titulo!,
+      cuerpo: this.form.value.cuerpo!,
+      tema: this.form.value.tema!,
+      nivelDificultad: this.form.value.nivelDificultad!
+    };
+
+    this.contenidoService.update(this.contenidoId, contenidoActualizado).subscribe({
       next: () => {
         this.snackBar.open('Contenido actualizado', 'OK', { duration: 2000 });
         this.router.navigate(['/admin/contenidos']);
