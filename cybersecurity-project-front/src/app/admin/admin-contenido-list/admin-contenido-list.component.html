@@ -1,0 +1,54 @@
+<div
+  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded shadow"
+>
+  <h1 class="text-2xl font-bold mb-6 dark:text-white">Gestión de Contenidos</h1>
+
+  <button
+    class="mb-4 px-4 py-2 bg-green-600 text-white rounded"
+    (click)="create()"
+  >
+    + Crear contenido
+  </button>
+
+  <div *ngIf="loading" class="text-gray-400">Cargando...</div>
+
+  <table *ngIf="!loading && contenidos.length > 0" class="w-full text-left">
+    <thead>
+      <tr class="border-b dark:border-gray-600">
+        <th class="p-2 dark:text-white">Título</th>
+        <th class="p-2 dark:text-white">Tema</th>
+        <th class="p-2 dark:text-white">Dificultad</th>
+        <th class="p-2 dark:text-white">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of contenidos" class="border-b dark:border-gray-600">
+        <td class="p-2 dark:text-white">{{ c.titulo }}</td>
+        <td class="p-2 dark:text-white">{{ c.tema }}</td>
+        <td class="p-2 dark:text-white">{{ c.nivelDificultad }}</td>
+        <td class="p-2 ">
+          <div class="flex flex-col gap-2">
+          <button
+            class="px-2 py-1 bg-blue-600 text-white rounded  botonera-contenido"
+            (click)="edit(c.idContenido)"
+          >
+            Editar
+          </button>
+
+          <button
+            class="px-2 py-1 bg-red-600 text-white rounded botonera-contenido"
+            (click)="delete(c.idContenido)"
+          >
+            Eliminar
+          </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && contenidos.length === 0" class="text-gray-400">
+    No hay contenidos creados.
+  </div>
+</div>

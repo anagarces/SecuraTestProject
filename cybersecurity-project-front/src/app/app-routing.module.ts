@@ -14,6 +14,9 @@ import { AdminQuizCreateComponent } from './admin/admin-quiz-create/admin-quiz-c
 import { AdminQuizEditComponent } from './admin/admin-quiz-edit/admin-quiz-edit.component';
 import { AdminResultsComponent } from './admin/admin-results/admin-results.component';
 import { AdminGuard } from './guards/admin.guard';
+import { AdminContenidoListComponent } from './admin/admin-contenido-list/admin-contenido-list.component';
+import { AdminContenidoCreateComponent } from './admin/admin-contenido-create/admin-contenido-create.component';
+import { AdminContenidoEditComponent } from './admin/admin-contenido-edit/admin-contenido-edit.component';
 
 const routes: Routes = [
 
@@ -74,6 +77,17 @@ const routes: Routes = [
   component: AdminResultsComponent,
   canActivate: [AdminGuard]
 },
+
+{
+  path: 'admin/contenidos',
+  canActivate: [AdminGuard],
+  children: [
+    { path: '', component: AdminContenidoListComponent },
+    { path: 'create', component: AdminContenidoCreateComponent },
+    { path: 'edit/:id', component: AdminContenidoEditComponent }
+  ]
+},
+
 
 
    // 5. Redirige cualquier ruta no encontrada a la página de inicio.
