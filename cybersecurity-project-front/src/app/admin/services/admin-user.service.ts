@@ -37,7 +37,7 @@ export class AdminUserService {
     return this.http.put<void>(`${this.apiUrl}/${id}/role`, { role });
   }
 
-  // 🔥 Desactivar usuario (FALTABA)
+  // Desactivar usuario 
   disable(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

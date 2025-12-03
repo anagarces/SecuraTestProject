@@ -151,4 +151,16 @@ public class UserAdminController {
         dto.setActive(u.isActive());
         return dto;
     }
+
+    @PutMapping("/{id}/reactivate")
+    public ResponseEntity<?> reactivate(@PathVariable Long id) {
+        return userDao.findById(id)
+                .map(u -> {
+                    u.setActive(true);
+                    userDao.save(u);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
