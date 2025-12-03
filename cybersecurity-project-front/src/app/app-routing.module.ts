@@ -1,114 +1,135 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ContentComponent } from './contenido/content.component';
+
 import { HomeComponent } from './inicio/home.component';
-import { ContentDetailComponent } from './contenido/content-detail/content-detail.component';
 import { LoginComponent } from './login/login/login.component';
-import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register/register.component';
+
+import { ContentComponent } from './contenido/content.component';
+import { ContentDetailComponent } from './contenido/content-detail/content-detail.component';
+
 import { QuizListComponent } from './cuestionarios/quiz-list/quiz-list.component';
 import { QuizTakeComponent } from './cuestionarios/quiz-take/quiz-take.component';
+
 import { MisResultadosComponent } from './pages/mis-resultados/mis-resultados.component';
+
 import { AdminQuizListComponent } from './admin/admin-quiz-list/admin-quiz-list.component';
 import { AdminQuizCreateComponent } from './admin/admin-quiz-create/admin-quiz-create.component';
 import { AdminQuizEditComponent } from './admin/admin-quiz-edit/admin-quiz-edit.component';
+
 import { AdminResultsComponent } from './admin/admin-results/admin-results.component';
-import { AdminGuard } from './guards/admin.guard';
+
 import { AdminContenidoListComponent } from './admin/admin-contenido-list/admin-contenido-list.component';
 import { AdminContenidoCreateComponent } from './admin/admin-contenido-create/admin-contenido-create.component';
 import { AdminContenidoEditComponent } from './admin/admin-contenido-edit/admin-contenido-edit.component';
+
 import { AdminUserListComponent } from './admin/admin-user-list/admin-user-list.component';
 import { AdminUserEditComponent } from './admin/admin-user-edit/admin-user-edit.component';
 
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+
 const routes: Routes = [
 
+  // ======================
+  // PÚBLICAS
+  // ======================
+  { path: '', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
 
-  //Pagina principal
-{ path: '', component: HomeComponent},
-
-//Formulario de inicio de sesion
-{path: 'login', component: LoginComponent},
-
-  //Formulario de registro
-   { path: 'register', component: RegisterComponent },
-    
-  {// Nadie puede acceder a ella ni a sus sub-rutas sin haber iniciado sesión.
+  // ======================
+  // CONTENIDO (PROTEGIDO)
+  // ======================
+  {
     path: 'contenido',
-    canActivate: [AuthGuard], // El portero protege esta ruta
-    component: ContentComponent
+    component: ContentComponent,
+    canActivate: [AuthGuard]
   },
-
-  {// 4. La ruta para el detalle de un contenido también está protegida.
+  {
     path: 'contenido/:id',
-    canActivate: [AuthGuard], // <-- El portero también protege esta
-    component: ContentDetailComponent
+    component: ContentDetailComponent,
+    canActivate: [AuthGuard]
   },
 
+  // ======================
+  // QUIZZES (PROTEGIDO)
+  // ======================
   {
     path: 'quizzes',
-    canActivate: [AuthGuard],
-    component: QuizListComponent
+    component: QuizListComponent,
+    canActivate: [AuthGuard]
   },
-
-  //Muestra un cuestionario
   {
     path: 'quiz/:id',
-    canActivate: [AuthGuard],
-    component: QuizTakeComponent
+    component: QuizTakeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'mis-resultados',
+    component: MisResultadosComponent,
+    canActivate: [AuthGuard]
   },
 
-  { path: 'mis-resultados', canActivate: [AuthGuard], component: MisResultadosComponent },
-
+  // ======================
+  // ADMIN QUIZZES
+  // ======================
   {
-  path: 'admin/quizzes',
-  component: AdminQuizListComponent,
-  canActivate: [AdminGuard]
-},
-{
-  path: 'admin/quizzes/create',
-  component: AdminQuizCreateComponent,
-  canActivate: [AdminGuard]
-},
-{
-  path: 'admin/quizzes/edit/:id',
-  component: AdminQuizEditComponent,
-  canActivate: [AdminGuard]
-},
-{
-  path: 'admin/results',
-  component: AdminResultsComponent,
-  canActivate: [AdminGuard]
-},
+    path: 'admin/quizzes',
+    component: AdminQuizListComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin/quizzes/create',
+    component: AdminQuizCreateComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin/quizzes/edit/:id',
+    component: AdminQuizEditComponent,
+    canActivate: [AdminGuard]
+  },
 
-{
-  path: 'admin/contenidos',
-  canActivate: [AdminGuard],
-  children: [
-    { path: '', component: AdminContenidoListComponent },
-    { path: 'create', component: AdminContenidoCreateComponent },
-    { path: 'edit/:id', component: AdminContenidoEditComponent }
-  ]
-},
+  // ======================
+  // ADMIN RESULTADOS
+  // ======================
+  {
+    path: 'admin/results',
+    component: AdminResultsComponent,
+    canActivate: [AdminGuard]
+  },
 
-{
-  path: 'admin/users',
-  component: AdminUserListComponent,
-  canActivate: [AuthGuard, AdminGuard]
-},
+  // ======================
+  // ADMIN CONTENIDOS
+  // ======================
+  {
+    path: 'admin/contenidos',
+    canActivate: [AdminGuard],
+    children: [
+      { path: '', component: AdminContenidoListComponent },
+      { path: 'create', component: AdminContenidoCreateComponent },
+      { path: 'edit/:id', component: AdminContenidoEditComponent }
+    ]
+  },
 
-{
-  path: 'admin/users/:id',
-  component: AdminUserEditComponent,
-  canActivate: [AuthGuard, AdminGuard]
-}
-,
+  // ======================
+  // ADMIN USUARIOS
+  // ======================
+  {
+    path: 'admin/users',
+    component: AdminUserListComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin/users/:id',
+    component: AdminUserEditComponent,
+    canActivate: [AdminGuard]
+  },
 
-
-   // 5. Redirige cualquier ruta no encontrada a la página de inicio.
-  // Esta debe ser SIEMPRE la última ruta de la lista.
-  { path: '**', redirectTo: '' },
-
-  //Lista de cuestionarios
+  // ======================
+  // RUTA NO ENCONTRADA
+  // ======================
+  { path: '**', redirectTo: '' }
 
 ];
 
@@ -116,6 +137,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-
-
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -68,7 +68,22 @@ export class AdminUserListComponent implements OnInit {
     });
   }
 
-  editUser(user: User) {
-    this.router.navigate(['/admin/users', user.id]);
+  reactivate(user: User): void {
+    if (!confirm(`¿Seguro que deseas reactivar a ${user.nombre}?`)) return;
+
+    this.userService.reactivate(user.id).subscribe({
+      next: () => {
+        this.snackBar.open('Usuario reactivado', 'OK', { duration: 3000 });
+        this.loadUsers();
+      },
+      error: () => {
+        this.snackBar.open('Error al reactivar usuario', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
+
+  
+  editUser(id: number) {
+    this.router.navigate(['/admin/users', id]);
   }
 }
