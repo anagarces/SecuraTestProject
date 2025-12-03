@@ -1,6 +1,6 @@
 package com.cybersecurityApp.cybersecurity_App.controller;
 
-import com.cybersecurityApp.cybersecurity_App.model.Role; // Asegúrate de tener este Enum creado
+import com.cybersecurityApp.cybersecurity_App.model.Role;
 import com.cybersecurityApp.cybersecurity_App.model.Usuario;
 import com.cybersecurityApp.cybersecurity_App.model.dao.UserDao;
 import com.cybersecurityApp.cybersecurity_App.model.dto.UsuarioDTO;
@@ -26,61 +26,59 @@ public class UserAdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // =========================
+    // LISTAR TODOS LOS USUARIOS
+    // =========================
     @GetMapping
-    public List<UsuarioDTO> getAll() {
-        return userDao.findAll().stream().map(this::convertToDTO).toList();
+    public List<UsuarioDTO> getAllUsers() {
+        return userDao.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
+    // =========================
+    // OBTENER USUARIO POR ID
+    // =========================
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getById(@PathVariable Long id) { // ID es Long
+    public ResponseEntity<UsuarioDTO> getUser(@PathVariable Long id) {
         return userDao.findById(id)
                 .map(u -> ResponseEntity.ok(convertToDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // =========================
+    // CREAR USUARIO MANUALMENTE (ADMIN)
+    // =========================
     @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO data) {
-        Usuario u = new Usuario();
-        u.setEmail(data.getEmail());
-        u.setNombre(data.getNombre());
+    public ResponseEntity<UsuarioDTO> createUser(@RequestBody UsuarioDTO data) {
 
-        // Conversión segura de String (DTO) a Enum (Entidad)
+        if (data.getEmail() == null || data.getEmail().isBlank())
+            return ResponseEntity.badRequest().body(null);
+
+        Usuario user = new Usuario();
+        user.setEmail(data.getEmail());
+        user.setNombre(data.getNombre());
+        user.setActive(true);
+
+        // Rol validado
         try {
-            u.setRole(Role.valueOf(data.getRole()));
+            user.setRole(Role.valueOf(data.getRole()));
         } catch (Exception e) {
-            u.setRole(Role.USER); // Rol por defecto si envían algo raro
+            user.setRole(Role.USER); // por defecto
         }
 
-        u.setActive(true);
-        // Password temporal
-        u.setPassword(passwordEncoder.encode("123456"));
+        // Password temporal autogenerada
+        user.setPassword(passwordEncoder.encode("123456"));
 
-        Usuario saved = userDao.save(u);
+        Usuario saved = userDao.save(user);
 
-        data.setId(saved.getId());
-        return ResponseEntity.ok(data);
+        return ResponseEntity.ok(convertToDTO(saved));
     }
 
-    @PutMapping("/{id}/role")
-    public ResponseEntity<?> updateRole(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> roleBody) {
-
-        String newRoleStr = roleBody.get("role");
-
-        return userDao.findById(id)
-                .map(u -> {
-                    try {
-                        u.setRole(Role.valueOf(newRoleStr));
-                        userDao.save(u);
-                        return ResponseEntity.ok().build();
-                    } catch (IllegalArgumentException e) {
-                        return ResponseEntity.badRequest().body("Rol no válido");
-                    }
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
+    // =========================
+    // ACTUALIZAR DATOS GENERALES DEL USUARIO
+    // =========================
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
             @PathVariable Long id,
@@ -88,17 +86,50 @@ public class UserAdminController {
 
         return userDao.findById(id)
                 .map(u -> {
+
                     u.setEmail(dto.getEmail());
                     u.setNombre(dto.getNombre());
-                    // Nota: No actualizamos password ni rol aquí
+                    // NOTA: No se cambian password ni rol desde aquí
+
                     userDao.save(u);
-                    return ResponseEntity.ok().build();
+
+                    return ResponseEntity.ok(convertToDTO(u));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // =========================
+    // ACTUALIZAR SOLO EL ROL
+    // =========================
+    @PutMapping("/{id}/role")
+    public ResponseEntity<?> updateRole(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        String newRole = body.get("role");
+
+        if (newRole == null)
+            return ResponseEntity.badRequest().body("Campo 'role' obligatorio");
+
+        return userDao.findById(id)
+                .map(u -> {
+                    try {
+                        u.setRole(Role.valueOf(newRole));
+                        userDao.save(u);
+                        return ResponseEntity.ok(convertToDTO(u));
+
+                    } catch (IllegalArgumentException e) {
+                        return ResponseEntity.badRequest().body("Rol inválido");
+                    }
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // =========================
+    // DESACTIVAR USUARIO (NO ELIMINAR)
+    // =========================
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> disable(@PathVariable Long id) {
+    public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
         return userDao.findById(id)
                 .map(u -> {
                     u.setActive(false);
@@ -108,13 +139,15 @@ public class UserAdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Método auxiliar para no repetir código de mapeo
+    // =========================
+    // Metodo auxiliar
+    // =========================
     private UsuarioDTO convertToDTO(Usuario u) {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setId(u.getId());
         dto.setEmail(u.getEmail());
         dto.setNombre(u.getNombre());
-        dto.setRole(u.getRole().name()); // Convertimos Enum a String
+        dto.setRole(u.getRole().name());
         dto.setActive(u.isActive());
         return dto;
     }

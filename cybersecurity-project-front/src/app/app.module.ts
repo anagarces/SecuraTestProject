@@ -35,6 +35,8 @@ import { AdminResultsComponent } from './admin/admin-results/admin-results.compo
 import { AdminContenidoListComponent } from './admin/admin-contenido-list/admin-contenido-list.component';
 import { AdminContenidoCreateComponent } from './admin/admin-contenido-create/admin-contenido-create.component';
 import { AdminContenidoEditComponent } from './admin/admin-contenido-edit/admin-contenido-edit.component';
+import { AdminUserListComponent } from './admin/admin-user-list/admin-user-list.component';
+import { AdminUserEditComponent } from './admin/admin-user-edit/admin-user-edit.component';
 
 
 @NgModule({
@@ -55,6 +57,8 @@ import { AdminContenidoEditComponent } from './admin/admin-contenido-edit/admin-
     AdminContenidoListComponent,
     AdminContenidoCreateComponent,
     AdminContenidoEditComponent,
+    AdminUserListComponent,
+    AdminUserEditComponent,
   
   ],
   imports: [

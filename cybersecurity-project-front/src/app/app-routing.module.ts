@@ -17,6 +17,8 @@ import { AdminGuard } from './guards/admin.guard';
 import { AdminContenidoListComponent } from './admin/admin-contenido-list/admin-contenido-list.component';
 import { AdminContenidoCreateComponent } from './admin/admin-contenido-create/admin-contenido-create.component';
 import { AdminContenidoEditComponent } from './admin/admin-contenido-edit/admin-contenido-edit.component';
+import { AdminUserListComponent } from './admin/admin-user-list/admin-user-list.component';
+import { AdminUserEditComponent } from './admin/admin-user-edit/admin-user-edit.component';
 
 const routes: Routes = [
 
@@ -88,6 +90,18 @@ const routes: Routes = [
   ]
 },
 
+{
+  path: 'admin/users',
+  component: AdminUserListComponent,
+  canActivate: [AuthGuard, AdminGuard]
+},
+
+{
+  path: 'admin/users/:id',
+  component: AdminUserEditComponent,
+  canActivate: [AuthGuard, AdminGuard]
+}
+,
 
 
    // 5. Redirige cualquier ruta no encontrada a la página de inicio.
