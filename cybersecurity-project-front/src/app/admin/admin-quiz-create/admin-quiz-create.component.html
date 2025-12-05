@@ -1,94 +1,159 @@
 <div
-  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded"
+  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded border border-gray-200 dark:border-gray-700"
 >
-  <h1 class="text-2xl font-bold mb-6 dark:text-white">
-    Crear nuevo cuestionario
-  </h1>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold dark:text-white">Crear nuevo cuestionario</h1>
+  </div>
 
   <form [formGroup]="quizForm">
     <!-- Título -->
     <div class="mb-4">
-      <label class="font-semibold dark:text-white">Título</label>
+      <label class="block font-semibold mb-1 dark:text-white">Título *</label>
       <input
         type="text"
         formControlName="title"
-        class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600"
+        placeholder="Ej: Fundamentos de Ciberseguridad"
       />
     </div>
 
     <!-- Descripción -->
     <div class="mb-6">
-      <label class="font-semibold dark:text-white">Descripción</label>
+      <label class="block font-semibold mb-1 dark:text-white"
+        >Descripción *</label
+      >
       <textarea
         formControlName="description"
-        class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+        rows="3"
+        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600"
+        placeholder="Describe el objetivo de este cuestionario..."
       ></textarea>
     </div>
 
     <!-- Preguntas -->
     <div formArrayName="questions">
-      <h2 class="text-xl font-semibold mb-4 dark:text-white">Preguntas</h2>
+      <div
+        class="flex justify-between items-center mb-4 border-b pb-2 dark:border-gray-600"
+      >
+        <h2 class="text-xl font-semibold dark:text-white">Preguntas</h2>
+        <button
+          type="button"
+          (click)="addQuestion()"
+          class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm flex items-center shadow"
+        >
+          <span class="mr-1 font-bold text-lg">+</span> Nueva Pregunta
+        </button>
+      </div>
 
+      <!-- Loop de Preguntas -->
       <div
         *ngFor="let q of questions.controls; let qi = index"
         [formGroupName]="qi"
-        class="border p-4 mb-4 rounded dark:border-gray-600"
+        class="border p-4 mb-6 rounded bg-gray-50 dark:bg-gray-750 dark:border-gray-600 relative transition hover:shadow-md"
       >
-        <label class="font-semibold dark:text-white">
-          Pregunta {{ qi + 1 }}
-        </label>
+        <!-- Encabezado Pregunta -->
+        <div class="flex justify-between items-center mb-3">
+          <label class="font-semibold text-lg text-gray-700 dark:text-gray-200">
+            Pregunta {{ qi + 1 }}
+          </label>
+
+          <!-- Botón Eliminar Pregunta -->
+          <button
+            type="button"
+            (click)="removeQuestion(qi)"
+            class="text-red-500 hover:text-red-700 text-sm font-medium hover:underline flex items-center transition-colors"
+          >
+            Eliminar pregunta
+          </button>
+        </div>
+
         <input
           type="text"
           formControlName="text"
-          class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-3"
+          class="w-full p-3 border rounded mb-4 focus:ring-2 focus:ring-blue-400 outline-none dark:bg-gray-700 dark:text-white dark:border-gray-500"
+          placeholder="Escribe la pregunta aquí..."
         />
 
-        <!-- Opciones -->
-        <div formArrayName="options" class="ml-4">
+        <!-- Loop de Opciones -->
+        <div
+          formArrayName="options"
+          class="ml-2 pl-4 border-l-2 border-gray-200 dark:border-gray-600 space-y-3"
+        >
+          <label
+            class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"
+            >Opciones:</label
+          >
+
           <div
             *ngFor="let opt of getOptions(qi).controls; let oi = index"
             [formGroupName]="oi"
-            class="flex items-center mb-2"
+            class="flex items-center"
           >
-            <input
-              type="radio"
-              name="create_correctOption_{{ qi }}"
-              [checked]="opt.get('correct')?.value"
-              (change)="setCorrectOption(qi, oi)"
-              class="mr-2"
-            />
+            <!-- Radio Correcta -->
+            <div
+              class="relative flex items-center justify-center mr-3"
+              title="Marcar como correcta"
+            >
+              <input
+                type="radio"
+                name="create_correctOption_{{ qi }}"
+                [checked]="opt.get('correct')?.value"
+                (change)="setCorrectOption(qi, oi)"
+                class="w-5 h-5 text-blue-600 cursor-pointer focus:ring-blue-500"
+              />
+            </div>
 
+            <!-- Texto Opción -->
             <input
               type="text"
               formControlName="text"
-              class="flex-1 p-2 border rounded dark:bg-gray-700 dark:text-white"
+              class="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-300 outline-none dark:bg-gray-700 dark:text-white dark:border-gray-500"
+              placeholder="Opción {{ oi + 1 }}"
             />
+
+            <!-- Botón Eliminar Opción (X) -->
+            <button
+              type="button"
+              (click)="removeOption(qi, oi)"
+              class="ml-2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+              title="Eliminar opción"
+            >
+              ✕
+            </button>
           </div>
 
+          <!-- Botón Agregar Opción -->
           <button
             type="button"
             (click)="addOption(qi)"
-            class="mt-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+            class="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline flex items-center"
           >
-            + Agregar opción
+            + Agregar otra opción
           </button>
         </div>
       </div>
-
-      <button
-        type="button"
-        (click)="addQuestion()"
-        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-      >
-        + Agregar pregunta
-      </button>
     </div>
   </form>
 
-  <button
-    (click)="saveQuiz()"
-    class="mt-6 w-full bg-green-700 text-white py-2 rounded hover:bg-green-800"
+  <!-- Botones de Acción -->
+  <div
+    class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col-reverse sm:flex-row gap-4 justify-end"
   >
-    Guardar cuestionario
-  </button>
+    <!-- Cancelar -->
+    <button
+      type="button"
+      (click)="cancel()"
+      class="w-full sm:w-auto px-6 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded hover:bg-gray-200 border border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors"
+    >
+      Cancelar
+    </button>
+
+    <!-- Guardar -->
+    <button
+      (click)="saveQuiz()"
+      class="w-full sm:w-auto px-8 py-2.5 bg-green-600 text-white font-bold rounded shadow hover:bg-green-700 focus:ring-4 focus:ring-green-300 transition-all transform hover:-translate-y-0.5"
+    >
+      Guardar Cuestionario
+    </button>
+  </div>
 </div>

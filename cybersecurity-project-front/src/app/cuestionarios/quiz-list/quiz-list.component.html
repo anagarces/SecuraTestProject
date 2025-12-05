@@ -1,30 +1,74 @@
-<div class="quiz-list-container">
-  <h2 class="text-xl font-semibold mb-4 titulo-seccion-quiz">
-    Cuestionarios disponibles
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <h2
+    class="text-3xl font-bold text-gray-900 dark:text-white mb-6 border-b pb-3 dark:border-gray-700"
+  >
+    Cuestionarios Disponibles
   </h2>
 
-  <div *ngIf="quizzes.length === 0" class="text-gray-500 no-cuestionarios">
-    No hay cuestionarios disponibles
+  <!-- Estado Vacío -->
+  <div
+    *ngIf="quizzes.length === 0"
+    class="text-center py-16 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700"
+  >
+    <svg
+      class="mx-auto h-12 w-12 text-gray-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1"
+        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      />
+    </svg>
+    <p class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+      Sin evaluaciones activas
+    </p>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Vuelve más tarde para poner a prueba tus conocimientos.
+    </p>
   </div>
 
-  <ul class="quiz-list">
+  <!-- Lista de Quizzes -->
+  <ul *ngIf="quizzes.length > 0" class="space-y-6">
     <li
       *ngFor="let quiz of quizzes"
-      class="quiz-item"
       [routerLink]="['/quiz', quiz.id]"
-      style="
-        cursor: pointer;
-        padding: 10px;
-        border: 3px solid #251569;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        font-size: 20px;
-      "
+      class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border-l-4 border-indigo-500 dark:border-pink-500 cursor-pointer transition-all duration-200 hover:shadow-xl hover:bg-indigo-50 dark:hover:bg-gray-700/50 transform hover:translate-y-[-2px]"
     >
-      <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #251569">
-        {{ quiz.title }}
-      </h3>
-      <p style="margin: 0; color: rgb(58, 57, 57)">{{ quiz.description }}</p>
+      <div class="flex items-start justify-between">
+        <!-- Contenido Principal -->
+        <div class="flex-1 min-w-0">
+          <h3
+            class="mb-1 text-xl font-extrabold tracking-tight text-gray-900 dark:text-white"
+          >
+            {{ quiz.title }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-base line-clamp-2">
+            {{ quiz.description }}
+          </p>
+        </div>
+
+        <!-- Indicador de Acción -->
+        <div class="ml-4 flex-shrink-0 text-indigo-500 dark:text-pink-500">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-9 0V3h4v2m-4 0h4m-1 7l3 3m0 0l3-3m-3 3V7"
+            />
+          </svg>
+        </div>
+      </div>
     </li>
   </ul>
 </div>

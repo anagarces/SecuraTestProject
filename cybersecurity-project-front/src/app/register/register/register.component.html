@@ -1,61 +1,166 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <div class="register-text">
-    <p>
-      Da el salto a la seguridad: regístrate ahora y convierte tu conocimiento
-      en el mejor cortafuegos de la empresa.
-    </p>
-  </div>
+<div
+  class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-50 to-gray-200 dark:from-gray-900 dark:to-gray-800"
+>
+  <div
+    class="max-w-md w-full p-10 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 relative overflow-hidden"
+  >
+    <!-- Franja de color degradado (Integración Visual) -->
+    <div
+      class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-pink-500 to-indigo-600 rounded-t-2xl"
+    ></div>
 
-  <div>
-    <div class="register-container">
-      <!-- Nombre -->
-      <label>Nombre:</label>
-      <input formControlName="nombre" type="text" />
-      <!-- Errores de validación del cliente -->
-      <div *ngIf="f['nombre'].touched && f['nombre'].errors">
-        <small *ngIf="f['nombre'].errors['required']" class="error"
-          >El nombre es obligatorio.</small
-        >
+    <div class="text-center pt-4">
+      <h2 class="mt-3 text-4xl font-extrabold text-gray-900 dark:text-white">
+        Únete a <span class="text-pink-600 dark:text-pink-400">SecuraTest</span>
+      </h2>
+      <p class="mt-2 text-md text-gray-600 dark:text-gray-400">
+        Da el salto a la seguridad: regístrate y convierte tu conocimiento en el
+        mejor cortafuegos.
+      </p>
+    </div>
+
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="mt-8 space-y-6"
+    >
+      <div class="rounded-md shadow-sm space-y-5">
+        <!-- Nombre -->
+        <div>
+          <label
+            for="nombre"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >Nombre</label
+          >
+          <input
+            id="nombre"
+            formControlName="nombre"
+            type="text"
+            placeholder="Tu nombre completo"
+            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 transition-shadow shadow-inner"
+          />
+          <!-- Errores de validación del cliente -->
+          <div *ngIf="f['nombre'].touched && f['nombre'].errors" class="mt-1">
+            <small
+              *ngIf="f['nombre'].errors['required']"
+              class="text-xs font-medium text-red-500"
+            >
+              El nombre es obligatorio.
+            </small>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >Email</label
+          >
+          <input
+            id="email"
+            formControlName="email"
+            type="email"
+            placeholder="correo@empresa.com"
+            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 transition-shadow shadow-inner"
+          />
+          <!-- Errores del backend -->
+          <div *ngIf="backendErrors.email" class="mt-1">
+            <small class="text-xs font-medium text-red-500">{{
+              backendErrors.email
+            }}</small>
+          </div>
+          <!-- Errores del cliente -->
+          <div *ngIf="f['email'].touched && f['email'].errors" class="mt-1">
+            <small
+              *ngIf="f['email'].errors['required']"
+              class="text-xs font-medium text-red-500"
+            >
+              El email es obligatorio.
+            </small>
+            <small
+              *ngIf="f['email'].errors['email']"
+              class="text-xs font-medium text-red-500"
+            >
+              El formato del email no es válido.
+            </small>
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div>
+          <label
+            for="password"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >Contraseña</label
+          >
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            placeholder="Mínimo 4 caracteres"
+            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 transition-shadow shadow-inner"
+          />
+          <!-- Errores del backend -->
+          <div *ngIf="backendErrors.password" class="mt-1">
+            <small class="text-xs font-medium text-red-500">{{
+              backendErrors.password
+            }}</small>
+          </div>
+          <!-- Errores del cliente -->
+          <div
+            *ngIf="f['password'].touched && f['password'].errors"
+            class="mt-1"
+          >
+            <small
+              *ngIf="f['password'].errors['required']"
+              class="text-xs font-medium text-red-500"
+            >
+              La contraseña es obligatoria.
+            </small>
+            <small
+              *ngIf="f['password'].errors['minlength']"
+              class="text-xs font-medium text-red-500"
+            >
+              Debe tener al menos 4 caracteres.
+            </small>
+          </div>
+        </div>
       </div>
 
-      <!-- Email -->
-      <label>Email:</label>
-      <input formControlName="email" type="email" />
-      <!-- Errores del backend -->
-      <div *ngIf="backendErrors.email" class="error">
-        {{ backendErrors.email }}
-      </div>
-      <!-- Errores del cliente -->
-      <div *ngIf="f['email'].touched && f['email'].errors">
-        <small *ngIf="f['email'].errors['required']" class="error"
-          >El email es obligatorio.</small
+      <!-- Botón de Registro con Degradado -->
+      <div>
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid"
+          class="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-lg font-bold rounded-xl text-white bg-gradient-to-r from-pink-500 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-pink-500/50 transition-all transform hover:scale-[1.01]"
         >
-        <small *ngIf="f['email'].errors['email']" class="error"
-          >El formato del email no es válido.</small
-        >
+          Registrar
+        </button>
       </div>
-
-      <!-- Contraseña -->
-      <label>Contraseña:</label>
-      <input formControlName="password" type="password" />
-      <!-- Errores del backend -->
-      <div *ngIf="backendErrors.password" class="error">
-        {{ backendErrors.password }}
-      </div>
-      <!-- Errores del cliente -->
-      <div *ngIf="f['password'].touched && f['password'].errors">
-        <small *ngIf="f['password'].errors['required']" class="error"
-          >La contraseña es obligatoria.</small
-        >
-        <small *ngIf="f['password'].errors['minlength']" class="error"
-          >Debe tener al menos 4 caracteres.</small
-        >
-      </div>
-
-      <button type="submit" [disabled]="registerForm.invalid">Registrar</button>
 
       <!-- Mensaje de éxito -->
-      <div *ngIf="message" class="success">{{ message }}</div>
-    </div>
+      <div
+        *ngIf="message"
+        class="text-center p-3 rounded-lg bg-green-50 text-green-700 border border-green-200"
+      >
+        <p class="font-medium">{{ message }}</p>
+      </div>
+
+      <!-- Enlace a Iniciar Sesión -->
+      <div
+        class="text-center text-sm font-medium pt-4 border-t border-gray-100 dark:border-gray-700"
+      >
+        <p class="text-gray-600 dark:text-gray-400">
+          ¿Ya tienes cuenta?
+          <a
+            routerLink="/login"
+            class="font-bold text-pink-600 dark:text-pink-400 hover:text-pink-500 dark:hover:text-pink-300 transition-colors"
+          >
+            Iniciar sesión aquí
+          </a>
+        </p>
+      </div>
+    </form>
   </div>
-</form>
+</div>

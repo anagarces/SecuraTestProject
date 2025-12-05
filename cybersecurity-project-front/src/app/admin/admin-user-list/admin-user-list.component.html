@@ -1,58 +1,177 @@
-<table class="min-w-full border mt-6">
-  <thead>
-    <tr class="bg-gray-200">
-      <th class="px-4 py-2">ID</th>
-      <th class="px-4 py-2">Email</th>
-      <th class="px-4 py-2">Nombre</th>
-      <th class="px-4 py-2">Rol</th>
-      <th class="px-4 py-2">Estado</th>
-      <th class="px-4 py-2">Acciones</th>
-    </tr>
-  </thead>
+<div class="max-w-6xl mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+  <!-- ENCABEZADO -->
+  <div class="sm:flex sm:items-center sm:justify-between mb-8">
+    <div>
+      <h1
+        class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight"
+      >
+        Gestión de Usuarios
+      </h1>
+      <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        Administra el acceso, roles y estados de los usuarios registrados.
+      </p>
+    </div>
+    <!-- Aquí podrías poner un botón de "Crear Usuario" si existiera la función -->
+  </div>
 
-  <tbody>
-    <tr *ngFor="let user of users" class="border-b">
-      <td class="px-4 py-2">{{ user.id }}</td>
-      <td class="px-4 py-2">{{ user.email }}</td>
-      <td class="px-4 py-2">{{ user.nombre }}</td>
-      <td class="px-4 py-2">{{ user.role }}</td>
-
-      <td class="px-4 py-2">
-        <span
-          class="px-2 py-1 rounded text-white"
-          [ngClass]="user.active ? 'bg-green-600' : 'bg-red-600'"
+  <!-- CONTENEDOR DE LA TABLA -->
+  <div
+    class="bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-900/5 sm:rounded-lg overflow-hidden"
+  >
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700/50">
+          <tr>
+            <th
+              scope="col"
+              class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300 sm:pl-6"
+            >
+              Usuario
+            </th>
+            <th
+              scope="col"
+              class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              Rol
+            </th>
+            <th
+              scope="col"
+              class="px-3 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              Estado
+            </th>
+            <th
+              scope="col"
+              class="px-3 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              ID
+            </th>
+            <th
+              scope="col"
+              class="relative py-3.5 pl-3 pr-4 sm:pr-6 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800"
         >
-          {{ user.active ? "Activo" : "Inactivo" }}
-        </span>
-      </td>
+          <tr
+            *ngFor="let user of users"
+            class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+          >
+            <!-- USUARIO (Avatar + Nombre + Email) -->
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+              <div class="flex items-center">
+                <div class="h-10 w-10 flex-shrink-0">
+                  <span
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/50"
+                  >
+                    <span
+                      class="font-medium leading-none text-indigo-700 dark:text-indigo-300"
+                    >
+                      {{
+                        (user.nombre || user.email || "?")
+                          .charAt(0)
+                          .toUpperCase()
+                      }}
+                    </span>
+                  </span>
+                </div>
+                <div class="ml-4">
+                  <div class="font-medium text-gray-900 dark:text-white">
+                    {{ user.nombre || "Sin nombre" }}
+                  </div>
+                  <div class="text-gray-500 dark:text-gray-400 text-sm">
+                    {{ user.email }}
+                  </div>
+                </div>
+              </div>
+            </td>
 
-      <td class="px-4 py-2">
-        <!-- ✏ Editar -->
-        <button
-          class="bg-blue-500 text-white px-3 py-1 rounded mr-2"
-          (click)="editUser(user.id)"
-        >
-          Editar
-        </button>
+            <!-- ROL -->
+            <td
+              class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-300"
+            >
+              <span
+                class="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 dark:bg-gray-700 dark:text-gray-300 dark:ring-gray-600"
+              >
+                {{ user.role }}
+              </span>
+            </td>
 
-        <!-- ❌ Desactivar -->
-        <button
-          *ngIf="user.active"
-          class="bg-red-500 text-white px-3 py-1 rounded mr-2"
-          (click)="disableUser(user)"
-        >
-          Desactivar
-        </button>
+            <!-- ESTADO (Badge) -->
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
+              <span
+                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset"
+                [ngClass]="
+                  user.active
+                    ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/30 dark:text-green-400'
+                    : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/30 dark:text-red-400'
+                "
+              >
+                <!-- Punto indicador -->
+                <svg
+                  class="-ml-0.5 mr-1.5 h-2 w-2"
+                  [ngClass]="user.active ? 'text-green-500' : 'text-red-500'"
+                  fill="currentColor"
+                  viewBox="0 0 8 8"
+                >
+                  <circle cx="4" cy="4" r="3" />
+                </svg>
+                {{ user.active ? "Activo" : "Inactivo" }}
+              </span>
+            </td>
 
-        <!-- 🔄 Reactivar -->
-        <button
-          *ngIf="!user.active"
-          class="bg-green-600 text-white px-3 py-1 rounded"
-          (click)="reactivate(user)"
-        >
-          Reactivar
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+            <!-- ID (Discreto) -->
+            <td
+              class="whitespace-nowrap px-3 py-4 text-sm text-gray-400 dark:text-gray-500 text-center font-mono"
+            >
+              #{{ user.id }}
+            </td>
+
+            <!-- ACCIONES -->
+            <td
+              class="relative whitespace-nowrap py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-6 space-x-3"
+            >
+              <!-- Editar -->
+              <button
+                (click)="editUser(user.id)"
+                class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-semibold transition-colors hover:underline"
+              >
+                Editar
+              </button>
+
+              <!-- Separador vertical decorativo -->
+              <span class="text-gray-300 dark:text-gray-600">|</span>
+
+              <!-- Desactivar (Rojo) -->
+              <button
+                *ngIf="user.active"
+                (click)="disableUser(user)"
+                class="text-amber-600 hover:text-amber-900 dark:text-amber-500 dark:hover:text-amber-400 font-semibold transition-colors hover:underline"
+              >
+                Desactivar
+              </button>
+
+              <!-- Reactivar (Verde) -->
+              <button
+                *ngIf="!user.active"
+                (click)="reactivate(user)"
+                class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 font-semibold transition-colors hover:underline"
+              >
+                Reactivar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State (Opcional por seguridad) -->
+    <div *ngIf="users.length === 0" class="text-center py-10">
+      <p class="text-gray-500 text-sm">No se encontraron usuarios.</p>
+    </div>
+  </div>
+</div>

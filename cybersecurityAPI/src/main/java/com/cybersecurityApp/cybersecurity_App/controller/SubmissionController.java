@@ -1,6 +1,5 @@
 package com.cybersecurityApp.cybersecurity_App.controller;
 
-
 import com.cybersecurityApp.cybersecurity_App.model.Submission;
 import com.cybersecurityApp.cybersecurity_App.model.Usuario;
 import com.cybersecurityApp.cybersecurity_App.model.dao.SubmissionDao;
@@ -9,11 +8,11 @@ import com.cybersecurityApp.cybersecurity_App.model.dto.SubmissionRequestDTO;
 import com.cybersecurityApp.cybersecurity_App.model.dto.SubmissionSummaryDTO;
 import com.cybersecurityApp.cybersecurity_App.service.SubmissionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/submissions")
@@ -42,7 +41,7 @@ public class SubmissionController {
         ));
     }
 
-    // DTO simple de respuesta
+    // DTO simple de respuesta interna para el POST
     private record SubmissionResult(Long quizId, int score, int totalQuestions) {}
 
     @GetMapping("/my")
@@ -59,6 +58,8 @@ public class SubmissionController {
                         s.getId(),
                         (s.getQuiz() != null ? s.getQuiz().getId() : null),
                         (s.getQuiz() != null ? s.getQuiz().getTitle() : null),
+                        user.getEmail(),
+                        user.getNombre(),
                         s.getScore(),
                         s.getTotalQuestions(),
                         s.getSubmittedAt(),
@@ -69,5 +70,41 @@ public class SubmissionController {
         return ResponseEntity.ok(result);
     }
 
+    // ============================ ADMIN ============================ //
 
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<SubmissionSummaryDTO>> getAllResults() {
+        List<Submission> submissions = submissionDao.findAll();
+
+        List<SubmissionSummaryDTO> result = submissions.stream()
+                .map(s -> new SubmissionSummaryDTO(
+                        s.getId(),
+                        (s.getQuiz() != null ? s.getQuiz().getId() : null),
+                        (s.getQuiz() != null ? s.getQuiz().getTitle() : null),
+
+                        // Email
+                        (s.getUser() != null ? s.getUser().getEmail() : "Sin Email"),
+
+                        // Nombre (Asegúrate de que tu entidad Usuario tenga .getNombre())
+                        (s.getUser() != null ? s.getUser().getNombre() : "Desconocido"),
+
+                        s.getScore(),
+                        s.getTotalQuestions(),
+                        s.getSubmittedAt(),
+                        s.getFinishedAt()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(result);
+    }
+
+    // (Opcional para fase siguiente: ver detalle con respuestas)
+    @GetMapping("/admin/detail/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getSubmissionDetail(@PathVariable Long id) {
+        return submissionDao.findById(id)
+                .map(s -> ResponseEntity.ok(s)) // luego se hará DTO
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

@@ -1,32 +1,156 @@
-<div class="p-4">
-  <h2 class="text-2xl font-bold mb-4 dark:text-white">Mis resultados</h2>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-4xl">
+  <!-- Encabezado de la Sección - Borde de acento -->
+  <header
+    class="mb-8 pb-4 border-b-2 border-pink-500/50 dark:border-pink-900/50"
+  >
+    <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">
+      Mis <span class="text-indigo-600 dark:text-pink-400">Resultados</span>
+    </h2>
+    <p class="mt-1 text-lg text-gray-600 dark:text-gray-400">
+      Revisa tu historial de evaluaciones y mide tu progreso en ciberseguridad.
+    </p>
+  </header>
 
-  <div *ngIf="cargando" class="text-gray-500 dark:text-gray-400">Cargando...</div>
-  <div *ngIf="error" class="text-red-600">{{ error }}</div>
-
-  <div *ngIf="!cargando && resultados.length === 0" class="text-gray-500 dark:text-gray-400">
-    Aún no has completado ningún cuestionario.
+  <!-- Estados de Carga y Error -->
+  <div *ngIf="cargando" class="text-center py-12">
+    <!-- Spinner con color pink-500 -->
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500 mx-auto mb-3"
+    ></div>
+    <p class="text-indigo-600 dark:text-pink-400 font-medium">
+      Cargando historial de resultados...
+    </p>
+  </div>
+  <div
+    *ngIf="error"
+    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative dark:bg-red-900/20 dark:border-red-600 dark:text-red-400"
+  >
+    {{ error }}
   </div>
 
-  <div class="space-y-3" *ngIf="!cargando && resultados.length > 0">
-    <div *ngFor="let r of resultados" class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-semibold dark:text-white">
-            {{ r.quizTitle || ('Cuestionario #' + r.quizId) }}
+  <!-- Estado Vacío: Mensaje Intuitivo con CTA -->
+  <div
+    *ngIf="!cargando && resultados.length === 0"
+    class="text-center py-16 bg-white dark:bg-gray-800 rounded-xl shadow-lg shadow-indigo-200/50 dark:shadow-indigo-900/50 border border-gray-200 dark:border-gray-700"
+  >
+    <svg
+      class="mx-auto h-16 w-16 text-pink-600 dark:text-pink-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1.5"
+    >
+      <!-- Icono de documento o lista de chequeo -->
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9 12h6m-3-3v6M12 2a10 10 0 100 20 10 10 0 000-20z"
+      />
+    </svg>
+    <p class="mt-4 text-xl font-bold text-gray-900 dark:text-white">
+      ¡Empecemos a medir tu seguridad!
+    </p>
+
+    <!-- Párrafo Centrado -->
+    <p class="mt-2 text-md text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
+      Tu historial de resultados se mostrará aquí una vez que completes tu
+      primer cuestionario.
+    </p>
+
+    <!-- Botón CTA a cuestionarios -->
+    <a
+      routerLink="/quizzes"
+      class="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-full shadow-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 transition-all transform hover:scale-[1.02]"
+    >
+      <svg
+        class="w-5 h-5 mr-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+        />
+      </svg>
+      Ir a Cuestionarios
+    </a>
+  </div>
+
+  <!-- Lista de Resultados -->
+  <div class="space-y-6" *ngIf="!cargando && resultados.length > 0">
+    <div
+      *ngFor="let r of resultados"
+      class="rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-[1.005] transition-all duration-200 bg-white dark:bg-gray-800 flex overflow-hidden border border-gray-200 dark:border-gray-700 shadow-indigo-100/50 dark:shadow-indigo-900/20"
+    >
+      <!-- Indicador de Éxito (Barra lateral) -->
+      <div
+        class="flex-shrink-0 w-2.5"
+        [ngClass]="{
+          'bg-green-500': porcentaje(r) >= 70,
+          'bg-yellow-500': porcentaje(r) >= 40 && porcentaje(r) < 70,
+          'bg-red-500': porcentaje(r) < 40
+        }"
+      ></div>
+
+      <!-- ... (Resto de la tarjeta de resultado) ... -->
+      <div class="p-5 flex items-center justify-between flex-grow">
+        <!-- Detalle del Quiz -->
+        <div class="flex-1 min-w-0 pr-4">
+          <h3
+            class="text-xl font-extrabold text-indigo-700 dark:text-indigo-400 mb-1"
+          >
+            {{ r.quizTitle || "Cuestionario #" + r.quizId }}
           </h3>
           <p class="text-sm text-gray-500 dark:text-gray-400">
-            Enviado: {{ r.submittedAt | date:'short' }} • Finalizado: {{ r.finishedAt | date:'short' }}
+            Enviado: {{ r.submittedAt | date : "medium" }}
+          </p>
+          <p
+            *ngIf="r.finishedAt"
+            class="text-sm text-gray-500 dark:text-gray-400"
+          >
+            Finalizado: {{ r.finishedAt | date : "medium" }}
           </p>
         </div>
-        <div class="text-right">
-          <div class="text-xl font-bold dark:text-white">
-            {{ r.score }}/{{ r.totalQuestions }} ({{ porcentaje(r) }}%)
+
+        <!-- Puntuación y Enlace -->
+        <div class="flex-shrink-0 text-right space-y-1">
+          <div
+            class="text-3xl font-extrabold"
+            [ngClass]="{
+              'text-green-600 dark:text-green-400': porcentaje(r) >= 70,
+              'text-yellow-600 dark:text-yellow-400':
+                porcentaje(r) >= 40 && porcentaje(r) < 70,
+              'text-red-600 dark:text-red-400': porcentaje(r) < 40
+            }"
+          >
+            {{ porcentaje(r) }}%
           </div>
-          <a *ngIf="r.quizId"
-             [routerLink]="['/quizzes', r.quizId]"
-             class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
-            Ver cuestionario
+          <p class="text-sm text-gray-600 dark:text-gray-300 font-semibold">
+            ({{ r.score }}/{{ r.totalQuestions }})
+          </p>
+
+          <a
+            *ngIf="r.quizId"
+            [routerLink]="['/quiz', r.quizId]"
+            class="inline-flex items-center text-xs font-bold text-pink-600 dark:text-pink-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+          >
+            Ver Detalle
+            <svg
+              class="w-3 h-3 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
           </a>
         </div>
       </div>

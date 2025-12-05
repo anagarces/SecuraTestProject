@@ -1,164 +1,347 @@
-<!----INICIO CABECERA-->
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <!---INICIO CABECERA (HERO SECTION) - Degradado más Colorido y Natural -->
+  <div
+    class="relative py-24 md:py-32 text-center rounded-3xl mt-6 mb-16 overflow-hidden bg-gradient-to-br from-indigo-100 via-pink-100 to-white dark:from-indigo-950 dark:via-gray-800 dark:to-gray-900 shadow-2xl shadow-indigo-400/50 dark:shadow-indigo-900/70 transition-all duration-500"
+  >
+    <!-- Elementos decorativos de fondo (patrón de puntos sutil) -->
+    <div class="absolute inset-0 opacity-15 dark:opacity-5">
+      <svg
+        class="absolute inset-0 h-full w-full"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 100 100"
+      >
+        <pattern
+          id="pattern-dots"
+          x="0"
+          y="0"
+          width="10"
+          height="10"
+          patternUnits="userSpaceOnUse"
+        >
+          <circle
+            cx="1"
+            cy="1"
+            r="1"
+            fill="currentColor"
+            class="text-indigo-300 dark:text-pink-700"
+          />
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#pattern-dots)" />
+      </svg>
+    </div>
 
-<div class="hero-header hero-inicio">
-  <div class="hero-content">
-    <h1
-      class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl"
+    <div class="max-w-5xl mx-auto relative z-10">
+      <h1
+        class="mb-6 text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter text-gray-900 dark:text-white"
+      >
+        Fortalece el
+        <span
+          class="text-pink-600 dark:text-pink-400 border-b-8 border-indigo-400 dark:border-indigo-600 pb-2 inline-block transition-transform duration-300 hover:scale-105"
+          >Factor Humano</span
+        >
+        en Ciberseguridad
+      </h1>
+
+      <p
+        class="mb-12 text-xl font-semibold text-gray-700 dark:text-gray-300 max-w-3xl mx-auto"
+      >
+        Bienvenido a
+        <span
+          id="app-title"
+          class="font-extrabold text-indigo-700 dark:text-indigo-300"
+          >SecuraTest</span
+        >, la plataforma esencial para medir, educar y reforzar tus habilidades
+        de defensa digital contra las amenazas modernas.
+      </p>
+
+      <!-- Botón Entrar (Con degradado en el background y sombra) -->
+      <a
+        routerLink="/login"
+        class="inline-flex items-center justify-center px-12 py-4 text-xl font-bold text-white bg-gradient-to-r from-pink-600 to-indigo-700 rounded-full hover:from-pink-700 hover:to-indigo-800 focus:ring-4 focus:ring-pink-300 shadow-2xl shadow-pink-500/50 transition-all transform hover:scale-[1.05] hover:rotate-1"
+      >
+        Iniciar Sesión
+        <svg
+          class="w-6 h-6 ms-2 rtl:rotate-180"
+          aria-hidden="true"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M14 5l7 7m0 0l-7 7m7-7H3"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+  <!----FIN CABECERA-->
+
+  <!-- SECCIÓN DE CARACTERÍSTICAS DE LA PLATAFORMA - Estilo "Feature Grid" (Mantenido) -->
+  <section class="py-20 bg-transparent my-16">
+    <h2
+      class="text-3xl font-bold text-center mb-16 text-gray-900 dark:text-white"
     >
-      Tú eres la clave de nuestra seguridad.
-    </h1>
+      Herramientas para una
+      <span class="text-indigo-600">Defensa Proactiva</span>
+    </h2>
 
-    <p class="mb-6 text-lg font-normal lg:text-xl sm:px-16 titulo-parrafo-hero">
-      Bienvenido/a a la nueva herramienta de refuerzo en ciberseguridad de
-      <span id="app-title">SecuraTest</span>.
+    <div class="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+      <!-- Característica 1: Contenido -->
+      <div
+        class="p-8 rounded-2xl bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:border-indigo-400 transition-all text-left"
+      >
+        <div
+          class="inline-flex items-center justify-center w-14 h-14 mb-4 rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300 transform rotate-[-5deg]"
+        >
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.206 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.794 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.794 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.206 18 16.5 18s-3.332-.477-4.5-1.253"
+            />
+          </svg>
+        </div>
+        <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+          Contenido Específico
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-base">
+          Artículos y guías enfocadas en las amenazas más relevantes para tu
+          operación diaria, manteniéndote actualizado sin sobrecargar de
+          información.
+        </p>
+      </div>
+
+      <!-- Característica 2: Quizzes -->
+      <div
+        class="p-8 rounded-2xl bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:border-green-400 transition-all text-left"
+      >
+        <div
+          class="inline-flex items-center justify-center w-14 h-14 mb-4 rounded-xl bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300 transform rotate-[-5deg]"
+        >
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.192-2.045-.558-2.977z"
+            />
+          </svg>
+        </div>
+        <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+          Evaluaciones de Nivel
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-base">
+          Cuestionarios interactivos para medir tus debilidades actuales y
+          ofrecer rutas de mejora personalizadas.
+        </p>
+      </div>
+
+      <!-- Característica 3: Seguridad -->
+      <div
+        class="p-8 rounded-2xl bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:border-red-400 transition-all text-left"
+      >
+        <div
+          class="inline-flex items-center justify-center w-14 h-14 mb-4 rounded-xl bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300 transform rotate-[-5deg]"
+        >
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v3h8z"
+            />
+          </svg>
+        </div>
+        <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+          Análisis de Riesgos
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-base">
+          Convierte la debilidad humana en fuerza, mejorando la conciencia de
+          seguridad y la respuesta ante incidentes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: MISIÓN Y VALORES - Estilo "Duo-tone" (Mantenido) -->
+  <section class="py-20 max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-12">
+      <!-- Columna Izquierda: MISIÓN (Destacada) -->
+      <div
+        class="p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-xl shadow-indigo-300/50 dark:shadow-indigo-900/50 border border-indigo-200 dark:border-indigo-900 relative overflow-hidden transform hover:scale-[1.01] transition-transform"
+      >
+        <h2
+          class="text-lg font-semibold uppercase text-pink-600 dark:text-pink-400 mb-2"
+        >
+          Nuestra Esencia
+        </h2>
+        <h3 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
+          Misión y Propósito
+        </h3>
+        <p
+          class="text-xl text-gray-700 dark:text-gray-300 leading-relaxed border-l-4 border-pink-500 pl-4"
+        >
+          Convertir a cada usuario en la **primera y más fuerte línea de
+          defensa** contra las amenazas digitales, ofreciendo el conocimiento y
+          las herramientas necesarias para una seguridad proactiva y eficaz.
+        </p>
+
+        <!-- Elemento de fondo sutil -->
+        <div
+          class="absolute bottom-0 right-0 w-32 h-32 bg-indigo-100 dark:bg-indigo-800/20 rounded-tl-full opacity-50"
+        ></div>
+      </div>
+
+      <!-- Columna Derecha: VALORES (Listado de impacto) -->
+      <div class="space-y-8">
+        <!-- VALOR 1 -->
+        <div
+          class="flex items-start gap-4 p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+        >
+          <div
+            class="flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 15a4 4 0 004 4h9a5 5 0 100-10 4 4 0 00-4-4H7a4 4 0 00-4 4z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold dark:text-white">
+              Enfoque en la Práctica
+            </h4>
+            <p class="text-gray-600 text-sm dark:text-gray-400">
+              Priorizamos el aprendizaje basado en escenarios reales, no solo
+              teoría, para una aplicación inmediata.
+            </p>
+          </div>
+        </div>
+
+        <!-- VALOR 2 -->
+        <div
+          class="flex items-start gap-4 p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+        >
+          <div
+            class="flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold dark:text-white">
+              Transparencia en el Progreso
+            </h4>
+            <p class="text-gray-600 text-sm dark:text-gray-400">
+              Ofrecemos métricas claras para que los usuarios vean su evolución
+              y áreas de riesgo a mejorar.
+            </p>
+          </div>
+        </div>
+
+        <!-- VALOR 3 -->
+        <div
+          class="flex items-start gap-4 p-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+        >
+          <div
+            class="flex-shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100 text-yellow-600 dark:bg-yellow-900/50 dark:text-yellow-400"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold dark:text-white">
+              Simplicidad y Eficacia
+            </h4>
+            <p class="text-gray-600 text-sm dark:text-gray-400">
+              Diseñamos la plataforma para que el aprendizaje sea intuitivo,
+              rápido y con impacto real.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN CTA FINAL (Estilo "Card" de Alto Impacto con Vibración) -->
+  <div
+    class="max-w-4xl mx-auto mt-16 mb-10 p-12 bg-indigo-700 dark:bg-indigo-900 rounded-2xl text-center shadow-2xl shadow-indigo-500/50 dark:shadow-indigo-900/50 border-4 border-pink-400 dark:border-pink-600"
+  >
+    <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+      Tu viaje de ciberseguridad comienza ahora.
+    </h3>
+    <p class="mb-10 text-xl font-light text-indigo-100">
+      Regístrate hoy para empezar a medir, mejorar y dominar tus conocimientos
+      de seguridad digital.
     </p>
     <a
-      routerLink="/login"
-      class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+      routerLink="/register"
+      class="inline-flex items-center justify-center px-10 py-3 text-lg font-bold text-indigo-700 bg-white rounded-full hover:bg-gray-100 focus:ring-4 focus:ring-indigo-300 shadow-xl transition-all transform hover:scale-[1.05] hover:rotate-1 boton-registrar"
     >
-      Entrar
       <svg
-        class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 mr-2"
         fill="none"
-        viewBox="0 0 14 10"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
       >
         <path
-          stroke="currentColor"
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M1 5h12m0 0L9 1m4 4L9 9"
+          d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
         />
       </svg>
+      Regístrate Gratis
     </a>
   </div>
-</div>
-<!----FIN CABECERA-->
-<br /><br />
-
-<!---PARRAFO PON A PRUEBA-->
-<div class="parrafo-pon-prueba">
-  <h2 class="text-4xl font-extrabold dark:text-white texto-titulo-enlace">
-    Pon a prueba tus conocimientos
-  </h2>
-  <p
-    class="mb-4 text-lg font-normal text-gray-700 dark:text-gray-400 parrafo-container-inicio"
-  >
-    ¿Crees que puedes identificar un phishing? Demuéstralo. Nuestra sección de
-    <span id="cuestionario-texto">Cuestionarios Interactivos</span> está
-    diseñada para medir tu nivel de seguridad actual y detectar rápidamente tus
-    puntos débiles. No es solo un examen, es un entrenamiento dinámico para que
-    sepas exactamente dónde enfocar tu próxima mejora.
-  </p>
-</div>
-
-<!---INICIO DE PARRAFOS-->
-<!-- Acordeón adaptado a tus secciones -->
-<div id="accordion-cyber" data-accordion="open">
-  <!-- 1️⃣ PRIMERA SECCIÓN -->
-  <h2 id="accordion-cyber-heading-1">
-    <button
-      type="button"
-      class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-900 bg-gray-100 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-      data-accordion-target="#accordion-cyber-body-1"
-      aria-expanded="true"
-      aria-controls="accordion-cyber-body-1"
-    >
-      <span class="text-2xl font-bold dark:text-white">
-        El Factor Humano. Nuestra Primera Línea de Defensa.
-      </span>
-      <svg
-        data-accordion-icon
-        class="w-3 h-3 shrink-0 rotate-180"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 10 6"
-      >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 5 5 1 1 5"
-        />
-      </svg>
-    </button>
-  </h2>
-  <div id="accordion-cyber-body-1" aria-labelledby="accordion-cyber-heading-1">
-    <div
-      class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900"
-    >
-      <p
-        class="mb-4 text-lg font-normal text-gray-700 dark:text-white-400 contenido-parrafo"
-      >
-        La ciberseguridad ya no es solo cosa de TI. Es una responsabilidad de
-        todos. Accede a nuestra plataforma y domina las tácticas para
-        identificar el phishing, prevenir fugas de datos y proteger la
-        reputación de nuestro departamento. Tu conocimiento es nuestro mejor
-        firewall.
-      </p>
-    </div>
-  </div>
-
-  <!-- 2️⃣ SEGUNDA SECCIÓN -->
-  <h2 id="accordion-cyber-heading-2">
-    <button
-      type="button"
-      class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-      data-accordion-target="#accordion-cyber-body-2"
-      aria-expanded="false"
-      aria-controls="accordion-cyber-body-2"
-    >
-      <span class="text-2xl font-bold dark:text-white">
-        Artículos que te Hacen Pensar como un Hacker.
-      </span>
-      <svg
-        data-accordion-icon
-        class="w-3 h-3 shrink-0"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 10 6"
-      >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 5 5 1 1 5"
-        />
-      </svg>
-    </button>
-  </h2>
-  <div
-    id="accordion-cyber-body-2"
-    class="hidden"
-    aria-labelledby="accordion-cyber-heading-2"
-  >
-    <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
-      <p
-        class="mb-4 text-lg font-normal text-gray-700 dark:text-white-400 contenido-parrafo"
-      >
-        SecuraTest es una biblioteca de artículos y guías de ciberseguridad,
-        breves y actualizados, diseñados específicamente para las necesidades
-        del departamento. Desde la gestión de contraseñas hasta la detección de
-        amenazas avanzadas, te damos el conocimiento que necesitas para navegar
-        y trabajar sin riesgo.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="seccion-registrar">
-  <a
-    routerLink="/register"
-    class="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition duration-150 boton-registrar"
-  >
-    Regístrate aquí</a
-  >
-  <p class="mb-4 text-lg font-normal text-gray-700 dark:text-gray-400">
-    y empieza hoy a fortalecer la primera línea de defensa de nuestra empresa:
-    tú mismo.
-  </p>
 </div>

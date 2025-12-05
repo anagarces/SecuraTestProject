@@ -1,79 +1,183 @@
 <div
-  class="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded shadow"
+  class="max-w-3xl mx-auto mt-10 p-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700"
 >
-  <h1 class="text-2xl font-bold mb-6 dark:text-white">Editar usuario</h1>
+  <!-- ENCABEZADO -->
+  <div class="mb-8 border-b border-gray-200 dark:border-gray-700 pb-5">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+      Editar Usuario
+    </h1>
+    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+      Actualiza la información personal, roles y permisos de acceso.
+    </p>
+  </div>
 
-  <div *ngIf="loading" class="text-gray-400">Cargando usuario...</div>
-
-  <!-- FORM -->
-  <form *ngIf="!loading" [formGroup]="userForm">
-    <!-- Email -->
-    <label class="block font-semibold dark:text-white mb-1">Email</label>
-    <input
-      formControlName="email"
-      type="email"
-      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-4"
-    />
-
-    <!-- Nombre -->
-    <label class="block font-semibold dark:text-white mb-1">Nombre</label>
-    <input
-      formControlName="nombre"
-      type="text"
-      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-4"
-    />
-
-    <!-- Rol -->
-    <label class="block font-semibold dark:text-white mb-1">Rol</label>
-    <select
-      formControlName="role"
-      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white mb-4"
+  <!-- LOADER -->
+  <div *ngIf="loading" class="flex flex-col items-center justify-center py-12">
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-3"
+    ></div>
+    <span class="text-gray-500 text-sm animate-pulse"
+      >Cargando información del usuario...</span
     >
-      <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
-    </select>
+  </div>
 
-    <!-- Estado -->
-    <div class="mt-4 flex items-center">
-      <span class="font-semibold dark:text-white mr-2">Estado:</span>
+  <!-- FORMULARIO -->
+  <form *ngIf="!loading" [formGroup]="userForm" class="space-y-6">
+    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+      <!-- Email -->
+      <div class="sm:col-span-1">
+        <label
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >
+          Correo Electrónico
+        </label>
+        <input
+          formControlName="email"
+          type="email"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-shadow"
+        />
+      </div>
 
-      <span *ngIf="user.active" class="text-green-500 font-bold">Activo</span>
-      <span *ngIf="!user.active" class="text-red-500 font-bold"
-        >Desactivado</span
-      >
+      <!-- Nombre -->
+      <div class="sm:col-span-1">
+        <label
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >
+          Nombre Completo
+        </label>
+        <input
+          formControlName="nombre"
+          type="text"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-shadow"
+        />
+      </div>
+
+      <!-- Rol -->
+      <div class="sm:col-span-2">
+        <label
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >
+          Rol del Sistema
+        </label>
+        <select
+          formControlName="role"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white"
+        >
+          <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+        </select>
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          Define los permisos que tendrá este usuario en la plataforma.
+        </p>
+      </div>
+    </div>
+
+    <!-- BANNER DE ESTADO -->
+    <div
+      class="rounded-lg p-4 mt-6 border"
+      [ngClass]="
+        user.active
+          ? 'bg-green-50 border-green-200 dark:bg-green-900/10 dark:border-green-900/30'
+          : 'bg-red-50 border-red-200 dark:bg-red-900/10 dark:border-red-900/30'
+      "
+    >
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <!-- Icono Activo -->
+          <svg
+            *ngIf="user.active"
+            class="h-5 w-5 text-green-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <!-- Icono Inactivo -->
+          <svg
+            *ngIf="!user.active"
+            class="h-5 w-5 text-red-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3
+            class="text-sm font-medium"
+            [ngClass]="
+              user.active
+                ? 'text-green-800 dark:text-green-200'
+                : 'text-red-800 dark:text-red-200'
+            "
+          >
+            Estado de la cuenta: {{ user.active ? "Activo" : "Desactivado" }}
+          </h3>
+          <div
+            class="mt-2 text-sm"
+            [ngClass]="
+              user.active
+                ? 'text-green-700 dark:text-green-300'
+                : 'text-red-700 dark:text-red-300'
+            "
+          >
+            <p *ngIf="user.active">
+              El usuario tiene acceso completo a la plataforma según su rol.
+            </p>
+            <p *ngIf="!user.active">
+              El acceso de este usuario está restringido temporalmente.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 
-  <!-- Botones -->
-  <div class="mt-6 flex justify-between">
-    <button
-      (click)="saveUser()"
-      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-    >
-      Guardar cambios
-    </button>
+  <!-- BOTONES DE ACCIÓN -->
+  <div
+    class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col-reverse sm:flex-row sm:justify-between gap-4"
+  >
+    <!-- Lado Izquierdo: Acciones de Estado (Críticas) -->
+    <div>
+      <button
+        *ngIf="user.active"
+        (click)="disableUser()"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+      >
+        Desactivar Usuario
+      </button>
 
-    <button
-      (click)="goBack()"
-      class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-    >
-      Cancelar
-    </button>
+      <button
+        *ngIf="!user.active"
+        (click)="reactivate()"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+      >
+        Reactivar Usuario
+      </button>
+    </div>
 
-    <!-- Activar / Desactivar -->
-    <button
-      *ngIf="user.active"
-      (click)="disableUser()"
-      class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-    >
-      Desactivar
-    </button>
+    <!-- Lado Derecho: Acciones del Formulario -->
+    <div class="flex gap-3">
+      <button
+        (click)="goBack()"
+        class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 transition-colors"
+      >
+        Cancelar
+      </button>
 
-    <button
-      *ngIf="!user.active"
-      (click)="reactivate()"
-      class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-    >
-      Reactivar
-    </button>
+      <button
+        (click)="saveUser()"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+      >
+        Guardar Cambios
+      </button>
+    </div>
   </div>
 </div>
