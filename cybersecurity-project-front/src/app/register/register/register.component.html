@@ -39,13 +39,19 @@
             placeholder="Tu nombre completo"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 transition-shadow shadow-inner"
           />
-          <!-- Errores de validación del cliente -->
+          <!-- Errores de validación del cliente (Nombre) -->
           <div *ngIf="f['nombre'].touched && f['nombre'].errors" class="mt-1">
             <small
               *ngIf="f['nombre'].errors['required']"
               class="text-xs font-medium text-red-500"
             >
               El nombre es obligatorio.
+            </small>
+            <small
+              *ngIf="f['nombre'].errors['pattern']"
+              class="text-xs font-medium text-red-500"
+            >
+              El nombre solo debe contener letras y espacios.
             </small>
           </div>
         </div>
@@ -98,7 +104,7 @@
             id="password"
             formControlName="password"
             type="password"
-            placeholder="Mínimo 4 caracteres"
+            placeholder="Mín. 8 chars, Mayús, Minús, Núm, Símbolo"
             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 transition-shadow shadow-inner"
           />
           <!-- Errores del backend -->
@@ -107,7 +113,7 @@
               backendErrors.password
             }}</small>
           </div>
-          <!-- Errores del cliente -->
+          <!-- Errores del cliente (Contraseña) -->
           <div
             *ngIf="f['password'].touched && f['password'].errors"
             class="mt-1"
@@ -119,10 +125,49 @@
               La contraseña es obligatoria.
             </small>
             <small
-              *ngIf="f['password'].errors['minlength']"
+              *ngIf="
+                f['password'].errors['minlength'] ||
+                f['password'].errors['pattern']
+              "
               class="text-xs font-medium text-red-500"
             >
-              Debe tener al menos 4 caracteres.
+              La contraseña debe tener al menos 8 caracteres y contener
+              Mayúsculas, Minúsculas, números y símbolos.
+            </small>
+          </div>
+        </div>
+
+        <!-- Confirmar Contraseña (NUEVO CAMPO) -->
+        <div>
+          <label
+            for="confirmPassword"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >Confirmar Contraseña</label
+          >
+          <input
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            type="password"
+            placeholder="Repite tu contraseña"
+            class="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 transition-shadow shadow-inner"
+          />
+          <!-- Errores del cliente (Confirmación) -->
+          <div
+            *ngIf="f['confirmPassword'].touched && f['confirmPassword'].errors"
+            class="mt-1"
+          >
+            <small
+              *ngIf="f['confirmPassword'].errors['required']"
+              class="text-xs font-medium text-red-500"
+            >
+              La confirmación es obligatoria.
+            </small>
+            <!-- Este error se establece a nivel de formGroup -->
+            <small
+              *ngIf="registerForm.errors?.['mustMatch'] && f['confirmPassword'].errors?.['mustMatch']"
+              class="text-xs font-medium text-red-500"
+            >
+              Las contraseñas no coinciden.
             </small>
           </div>
         </div>
