@@ -1,8 +1,32 @@
-// register.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+
+/**
+ * Función de validación personalizada para confirmar que dos campos de contraseña coincidan.
+ */
+export function MustMatchValidator(controlName: string, matchingControlName: string): (formGroup: FormGroup) => ValidationErrors | null {
+  return (formGroup: FormGroup) => {
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
+
+    if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
+      // Retorna si otro validador ya ha encontrado un error en matchingControl
+      return null;
+    }
+
+    // Establece el error 'mustMatch' en el campo de confirmación si las contraseñas no coinciden
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ mustMatch: true });
+      return { mustMatch: true };
+    } else {
+      matchingControl.setErrors(null);
+      return null;
+    }
+  };
+}
+
 
 @Component({
   selector: 'app-register',
@@ -17,10 +41,19 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
 
+    // Regex mejorada para contraseña: Mín. 8 caracteres, 1 mayúscula, 1 minúscula, 1 número, 1 símbolo.
+    const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    
+    // Regex para nombre: solo letras, espacios, acentos y ñ
+    const namePattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+
     this.registerForm = this.fb.group({
-      nombre: ['', [Validators.required]],
+      nombre: ['', [Validators.required, Validators.maxLength(100), Validators.pattern(namePattern)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(4)]]
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(strongPasswordPattern)]],
+      confirmPassword: ['', [Validators.required]] // Nuevo campo
+    }, {
+      validator: MustMatchValidator('password', 'confirmPassword') // Validación a nivel de grupo
     });
    }
 
@@ -36,8 +69,13 @@ export class RegisterComponent {
     this.backendErrors = {};
     this.message = '';
 
+    // Nota de seguridad: Al enviar el formulario al backend, solo debes incluir los campos necesarios.
+    // El 'confirmPassword' es solo para validación del cliente y se debe omitir en el envío.
+    const { confirmPassword, ...dataToSend } = this.registerForm.value;
+
+
     //enviamos la peticion al backend
-    this.authService.register(this.registerForm.value).subscribe({
+    this.authService.register(dataToSend).subscribe({
       next: (response: any) => {
           this.message = response['message'];
           setTimeout(() => this.router.navigate(['/']), 2000);
