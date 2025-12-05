@@ -23,8 +23,12 @@ export class AdminQuizCreateComponent {
       description: ['', Validators.required],
       questions: this.fb.array([])
     });
+
+    // Iniciamos con una pregunta por defecto para no mostrar el formulario vacío
+    this.addQuestion();
   }
 
+  // --- Getters ---
   get questions(): FormArray {
     return this.quizForm.get('questions') as FormArray;
   }
@@ -33,6 +37,7 @@ export class AdminQuizCreateComponent {
     return this.questions.at(qi).get('options') as FormArray;
   }
 
+  // --- Lógica de Agregar ---
   addQuestion() {
     const questionGroup = this.fb.group({
       text: ['', Validators.required],
@@ -40,28 +45,61 @@ export class AdminQuizCreateComponent {
     });
 
     this.questions.push(questionGroup);
+
+    // Agregamos 2 opciones por defecto a la nueva pregunta
+    const newIndex = this.questions.length - 1;
+    this.addOption(newIndex);
+    this.addOption(newIndex);
   }
 
   addOption(qi: number) {
     const optionGroup = this.fb.group({
       text: ['', Validators.required],
-      correct: [false]   // 👈 ahora se llama 'correct'
+      correct: [false]
     });
 
     this.getOptions(qi).push(optionGroup);
   }
 
+  // --- Lógica de Eliminar (NUEVO) ---
+  removeQuestion(index: number) {
+    if (this.questions.length <= 1) {
+      this.snackBar.open('El cuestionario debe tener al menos una pregunta.', 'Cerrar', { duration: 2000 });
+      return;
+    }
+    
+    // Confirmación simple
+    if (confirm('¿Eliminar esta pregunta?')) {
+      this.questions.removeAt(index);
+    }
+  }
+
+  removeOption(qi: number, oi: number) {
+    const options = this.getOptions(qi);
+    if (options.length <= 2) {
+      this.snackBar.open('Mínimo 2 opciones requeridas.', 'Cerrar', { duration: 2000 });
+      return;
+    }
+    options.removeAt(oi);
+  }
+
+  // --- Utilidades ---
   setCorrectOption(qi: number, oi: number) {
     const options = this.getOptions(qi);
-
     options.controls.forEach((group, i) => {
       group.get('correct')?.setValue(i === oi);
     });
   }
 
+  cancel() {
+    this.router.navigate(['/admin/quizzes']);
+  }
+
+  // --- Guardar ---
   saveQuiz() {
     if (this.quizForm.invalid) {
-      this.snackBar.open('Completa todos los campos antes de guardar.', 'Cerrar', { duration: 2500 });
+      this.quizForm.markAllAsTouched();
+      this.snackBar.open('Por favor completa todos los campos requeridos.', 'Cerrar', { duration: 2500 });
       return;
     }
 

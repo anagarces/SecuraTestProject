@@ -1,1 +1,228 @@
-<p>admin-results works!</p>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Encabezado -->
+  <div class="sm:flex sm:items-center sm:justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+        Resultados de Evaluaciones
+      </h1>
+      <p class="mt-2 text-sm text-gray-500">
+        Historial completo y métricas de rendimiento de los usuarios.
+      </p>
+    </div>
+
+    <!-- Botón de Acción (Decorativo por ahora) -->
+    <div class="mt-4 sm:mt-0">
+      <button
+        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+      >
+        <svg
+          class="-ml-1 mr-2 h-5 w-5 text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+          />
+        </svg>
+        Exportar CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de Carga -->
+  <div
+    *ngIf="loading"
+    class="flex flex-col items-center justify-center py-20 bg-white rounded-xl shadow-sm border border-gray-100"
+  >
+    <div
+      class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mb-4"
+    ></div>
+    <span class="text-gray-500 font-medium animate-pulse"
+      >Cargando resultados...</span
+    >
+  </div>
+
+  <!-- Tabla de Resultados -->
+  <div
+    *ngIf="!loading"
+    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+  >
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              scope="col"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Usuario
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Cuestionario
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Puntaje
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Estado
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Finalizado
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr
+            *ngFor="let r of results"
+            class="hover:bg-gray-50 transition-colors duration-150 group"
+          >
+            <!-- 1. COLUMNA USUARIO (Nombre + Email) -->
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <!-- Avatar: Prioriza la inicial del nombre, sino usa la del email -->
+                  <span
+                    class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center ring-2 ring-white group-hover:ring-indigo-50 transition-all"
+                  >
+                    <span class="text-indigo-600 font-bold text-sm">
+                      {{
+                        (r.userName || r.userEmail || "?")
+                          .charAt(0)
+                          .toUpperCase()
+                      }}
+                    </span>
+                  </span>
+                </div>
+                <div class="ml-4">
+                  <!-- Nombre del Usuario (Negrita) -->
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ r.userName || "Usuario sin nombre" }}
+                  </div>
+                  <!-- Email del Usuario (Gris y más pequeño) -->
+                  <div class="text-xs text-gray-500">
+                    {{ r.userEmail }}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- 2. COLUMNA CUESTIONARIO -->
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-700 font-medium">
+                {{ r.quizTitle }}
+              </div>
+              <div class="text-xs text-gray-400 font-mono mt-0.5">
+                ID: {{ r.quizId || "#" }}
+              </div>
+            </td>
+
+            <!-- 3. COLUMNA PUNTAJE -->
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <span
+                class="text-sm font-bold text-gray-700 font-mono bg-gray-100 px-2 py-1 rounded"
+              >
+                {{ r.score }} <span class="text-gray-400 font-normal">/</span>
+                {{ r.totalQuestions }}
+              </span>
+            </td>
+
+            <!-- 4. COLUMNA ESTADO (Badge) -->
+            <td class="px-6 py-4 whitespace-nowrap text-center">
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize shadow-sm border border-opacity-20"
+                [ngClass]="{
+                  'bg-green-50 text-green-700 border-green-200':
+                    r.score / r.totalQuestions >= 0.7,
+                  'bg-yellow-50 text-yellow-700 border-yellow-200':
+                    r.score / r.totalQuestions >= 0.4 &&
+                    r.score / r.totalQuestions < 0.7,
+                  'bg-red-50 text-red-700 border-red-200':
+                    r.score / r.totalQuestions < 0.4
+                }"
+              >
+                <!-- Indicador visual (punto) -->
+                <svg
+                  class="-ml-0.5 mr-1.5 h-2 w-2"
+                  [ngClass]="{
+                    'text-green-400': r.score / r.totalQuestions >= 0.7,
+                    'text-yellow-400':
+                      r.score / r.totalQuestions >= 0.4 &&
+                      r.score / r.totalQuestions < 0.7,
+                    'text-red-400': r.score / r.totalQuestions < 0.4
+                  }"
+                  fill="currentColor"
+                  viewBox="0 0 8 8"
+                >
+                  <circle cx="4" cy="4" r="3" />
+                </svg>
+
+                {{ r.score / r.totalQuestions | percent : "1.0-0" }}
+
+                <!-- Texto condicional -->
+                <span class="ml-1" *ngIf="r.score / r.totalQuestions >= 0.7"
+                  >Aprobado</span
+                >
+                <span class="ml-1" *ngIf="r.score / r.totalQuestions < 0.4"
+                  >Reprobado</span
+                >
+              </span>
+            </td>
+
+            <!-- 5. COLUMNA FECHA -->
+            <td
+              class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500"
+            >
+              <div class="font-medium text-gray-900">
+                {{ r.finishedAt | date : "mediumDate" }}
+              </div>
+              <div class="text-xs text-gray-400 mt-0.5">
+                {{ r.finishedAt | date : "shortTime" }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="results.length === 0" class="text-center py-12 bg-white">
+        <div
+          class="mx-auto h-12 w-12 text-gray-300 bg-gray-50 rounded-full flex items-center justify-center mb-3"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-sm font-medium text-gray-900">Sin resultados</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Nadie ha completado un cuestionario todavía.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

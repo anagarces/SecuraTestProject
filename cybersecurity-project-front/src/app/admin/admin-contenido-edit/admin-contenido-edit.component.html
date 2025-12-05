@@ -1,41 +1,102 @@
 <div
-  class="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow rounded"
+  class="max-w-3xl mx-auto mt-10 p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
 >
-  <h1 class="text-2xl font-bold mb-6 dark:text-white">Editar contenido</h1>
+  <div class="mb-8 border-b border-gray-200 dark:border-gray-700 pb-5">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+      Editar contenido
+    </h1>
+    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+      Actualiza el material de estudio y sus metadatos asociados.
+    </p>
+  </div>
 
-  <div *ngIf="loading" class="text-gray-400">Cargando...</div>
+  <!-- LOADER -->
+  <div *ngIf="loading" class="flex flex-col items-center justify-center py-12">
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-3"
+    ></div>
+    <span class="text-gray-500 text-sm animate-pulse"
+      >Cargando contenido...</span
+    >
+  </div>
 
-  <form *ngIf="!loading" [formGroup]="form">
-    <label class="font-semibold dark:text-white">Título</label>
-    <input
-      formControlName="titulo"
-      class="w-full p-2 border rounded mb-4 dark:bg-gray-700 dark:text-white"
-    />
+  <form *ngIf="!loading" [formGroup]="form" class="space-y-6">
+    <!-- Título -->
+    <div>
+      <label
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >Título</label
+      >
+      <input
+        formControlName="titulo"
+        type="text"
+        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-shadow"
+        placeholder="Ej: Introducción al Phishing"
+      />
+    </div>
 
-    <label class="font-semibold dark:text-white">Tema</label>
-    <input
-      formControlName="tema"
-      class="w-full p-2 border rounded mb-4 dark:bg-gray-700 dark:text-white"
-    />
+    <!-- Tema -->
+    <div>
+      <label
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >Tema</label
+      >
+      <input
+        formControlName="tema"
+        type="text"
+        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-shadow"
+        placeholder="Ej: Ingeniería Social"
+      />
+    </div>
 
-    <label class="font-semibold dark:text-white">Nivel de dificultad</label>
-    <input
-      formControlName="nivelDificultad"
-      class="w-full p-2 border rounded mb-4 dark:bg-gray-700 dark:text-white"
-    />
+    <!-- Nivel de dificultad -->
+    <div>
+      <label
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >Nivel de dificultad</label
+      >
+      <input
+        formControlName="nivelDificultad"
+        type="text"
+        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-shadow"
+        placeholder="Ej: Básico, Intermedio, Avanzado"
+      />
+    </div>
 
-    <label class="font-semibold dark:text-white">Cuerpo</label>
-    <textarea
-      formControlName="cuerpo"
-      rows="5"
-      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
-    ></textarea>
+    <!-- Cuerpo -->
+    <div>
+      <label
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        >Cuerpo del Contenido</label
+      >
+      <textarea
+        formControlName="cuerpo"
+        rows="8"
+        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-shadow"
+        placeholder="Escribe el contenido del material..."
+      ></textarea>
+    </div>
   </form>
 
-  <button
-    (click)="save()"
-    class="mt-6 w-full bg-green-700 text-white py-2 rounded"
+  <!-- Botones de Acción -->
+  <div
+    class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-4"
   >
-    Guardar cambios
-  </button>
+    <!-- Botón Cancelar (Llama a goBack()) -->
+    <button
+      (click)="goBack()"
+      type="button"
+      class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 transition-colors"
+    >
+      Cancelar
+    </button>
+
+    <!-- Botón Guardar -->
+    <button
+      (click)="save()"
+      class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors transform hover:scale-[1.02]"
+    >
+      Guardar cambios
+    </button>
+  </div>
 </div>

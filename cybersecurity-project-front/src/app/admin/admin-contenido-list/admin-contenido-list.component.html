@@ -1,54 +1,187 @@
-<div
-  class="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded shadow"
->
-  <h1 class="text-2xl font-bold mb-6 dark:text-white">Gestión de Contenidos</h1>
+<div class="max-w-6xl mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+  <!-- ENCABEZADO Y BOTÓN CREAR -->
+  <div class="sm:flex sm:items-center sm:justify-between mb-8">
+    <div>
+      <h1
+        class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight"
+      >
+        Gestión de Contenidos
+      </h1>
+      <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        Administra los materiales de estudio y recursos educativos.
+      </p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <button
+        (click)="create()"
+        class="inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all transform hover:scale-105"
+      >
+        <svg
+          class="-ml-1 mr-2 h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        Crear contenido
+      </button>
+    </div>
+  </div>
 
-  <button
-    class="mb-4 px-4 py-2 bg-green-600 text-white rounded"
-    (click)="create()"
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div
+    class="bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-900/5 sm:rounded-lg overflow-hidden"
   >
-    + Crear contenido
-  </button>
+    <!-- LOADER -->
+    <div
+      *ngIf="loading"
+      class="flex flex-col items-center justify-center py-12"
+    >
+      <div
+        class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mb-3"
+      ></div>
+      <p class="text-sm text-gray-500 animate-pulse">Cargando contenidos...</p>
+    </div>
 
-  <div *ngIf="loading" class="text-gray-400">Cargando...</div>
-
-  <table *ngIf="!loading && contenidos.length > 0" class="w-full text-left">
-    <thead>
-      <tr class="border-b dark:border-gray-600">
-        <th class="p-2 dark:text-white">Título</th>
-        <th class="p-2 dark:text-white">Tema</th>
-        <th class="p-2 dark:text-white">Dificultad</th>
-        <th class="p-2 dark:text-white">Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let c of contenidos" class="border-b dark:border-gray-600">
-        <td class="p-2 dark:text-white">{{ c.titulo }}</td>
-        <td class="p-2 dark:text-white">{{ c.tema }}</td>
-        <td class="p-2 dark:text-white">{{ c.nivelDificultad }}</td>
-        <td class="p-2 ">
-          <div class="flex flex-col gap-2">
-          <button
-            class="px-2 py-1 bg-blue-600 text-white rounded  botonera-contenido"
-            (click)="edit(c.idContenido)"
+    <!-- TABLA -->
+    <div *ngIf="!loading && contenidos.length > 0" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700/50">
+          <tr>
+            <th
+              scope="col"
+              class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300 sm:pl-6"
+            >
+              Título
+            </th>
+            <th
+              scope="col"
+              class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              Tema
+            </th>
+            <th
+              scope="col"
+              class="px-3 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              Dificultad
+            </th>
+            <th
+              scope="col"
+              class="relative py-3.5 pl-3 pr-4 sm:pr-6 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-300"
+            >
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800"
+        >
+          <tr
+            *ngFor="let c of contenidos"
+            class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
           >
-            Editar
-          </button>
+            <!-- TÍTULO -->
+            <td
+              class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6"
+            >
+              {{ c.titulo }}
+            </td>
 
-          <button
-            class="px-2 py-1 bg-red-600 text-white rounded botonera-contenido"
-            (click)="delete(c.idContenido)"
+            <!-- TEMA -->
+            <td
+              class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-300"
+            >
+              {{ c.tema }}
+            </td>
+
+            <!-- DIFICULTAD (Badge) -->
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-center">
+              <span
+                class="inline-flex items-center rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300"
+              >
+                {{ c.nivelDificultad }}
+              </span>
+            </td>
+
+            <!-- ACCIONES -->
+            <td
+              class="relative whitespace-nowrap py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-6"
+            >
+              <div class="flex justify-center items-center space-x-3">
+                <!-- Botón Editar -->
+                <button
+                  (click)="edit(c.idContenido)"
+                  class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors font-medium text-xs sm:text-sm"
+                >
+                  Editar
+                </button>
+
+                <!-- Botón Eliminar -->
+                <button
+                  (click)="delete(c.idContenido)"
+                  class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 px-3 py-1.5 rounded transition-colors font-medium text-xs sm:text-sm"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE (Sin contenidos) -->
+    <div
+      *ngIf="!loading && contenidos.length === 0"
+      class="text-center py-16 bg-white dark:bg-gray-800"
+    >
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1"
+          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+        />
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+        No hay contenidos
+      </h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Comienza creando material educativo para tus usuarios.
+      </p>
+      <div class="mt-6">
+        <button
+          (click)="create()"
+          class="inline-flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        >
+          <svg
+            class="-ml-1 mr-2 h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            Eliminar
-          </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="!loading && contenidos.length === 0" class="text-gray-400">
-    No hay contenidos creados.
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Crear contenido
+        </button>
+      </div>
+    </div>
   </div>
 </div>

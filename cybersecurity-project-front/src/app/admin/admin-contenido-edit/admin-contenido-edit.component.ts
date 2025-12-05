@@ -48,6 +48,11 @@ export class AdminContenidoEditComponent implements OnInit {
       }
     });
   }
+  
+  // --- NUEVA FUNCIÓN: CANCELAR/REGRESAR ---
+  goBack() {
+    this.router.navigate(['/admin/contenidos']);
+  }
 
   save() {
     if (this.form.invalid) {
@@ -55,7 +60,6 @@ export class AdminContenidoEditComponent implements OnInit {
       return;
     }
 
-    
     const contenidoActualizado: IContenido = {
       idContenido: this.contenidoId,
       titulo: this.form.value.titulo!,

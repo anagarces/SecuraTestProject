@@ -15,7 +15,7 @@ export class AdminContenidoCreateComponent {
     titulo: ['', Validators.required],
     cuerpo: ['', Validators.required],
     tema: ['', Validators.required],
-    nivelDificultad: ['', Validators.required]   // ← nombre corregido
+    nivelDificultad: ['', Validators.required]
   });
 
   constructor(
@@ -25,13 +25,17 @@ export class AdminContenidoCreateComponent {
     private snackBar: MatSnackBar
   ) {}
 
+  // --- NUEVA FUNCIÓN: CANCELAR ---
+  cancel() {
+    this.router.navigate(['/admin/contenidos']);
+  }
+
   save() {
     if (this.form.invalid) {
       this.snackBar.open('Completa todos los campos', 'Cerrar');
       return;
     }
 
- 
     const nuevoContenido: IContenido = {
       idContenido: 0,
       titulo: this.form.value.titulo!,
