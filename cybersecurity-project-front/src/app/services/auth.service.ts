@@ -25,7 +25,7 @@ export class AuthService {
       localStorage.setItem('auth_token', response.token);
 
       const decoded: any = jwtDecode(response.token)
-      localStorage.setItem('user_role', decoded.role); // 👈 Guardamos el rol
+      localStorage.setItem('user_role', decoded.role); // Guardamos el rol
     })
   );
 
@@ -35,11 +35,24 @@ export class AuthService {
     /**
    * Cierra la sesión del usuario.
    */
- logout(): void {
+logout(callback?: () => void): void {
+
+  // Limpiamos credenciales
   localStorage.removeItem('auth_token');
   localStorage.removeItem('user_role');
-  this.router.navigate(['/login']);
+
+  // Guardamos una marca para mostrar mensaje en login
+  localStorage.setItem('logout_msg', 'true');
+
+  // callback permite ejecutar animaciones en UI antes de redirigir
+  if (callback) {
+    callback();
+  } else {
+    // fallback directo por si se llama sin transición
+    this.router.navigate(['/login']);
+  }
 }
+
 
 
     /**

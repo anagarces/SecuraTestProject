@@ -47,7 +47,7 @@ export class QuizTakeComponent implements OnInit {
     }));
 
     const submission: SubmissionRequest = {
-  quizId: this.quiz!.id!,   // ⬅️ Corregido con non-null assertion
+  quizId: this.quiz!.id!,   
   answers
 };
 

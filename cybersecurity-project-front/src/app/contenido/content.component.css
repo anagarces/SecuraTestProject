@@ -1,0 +1,30 @@
+/* Aparición suave del modal */
+.animate-fadeIn {
+  animation: fadeIn .35s ease;
+}
+.animate-scaleIn {
+  animation: scaleIn .4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+@keyframes scaleIn {
+  from { opacity: .7; transform: scale(.9) }
+  to   { opacity: 1; transform: scale(1) }
+}
+
+/* Fade de entrada de la página */
+.page-wrapper {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .5s ease;
+}
+
+.page-wrapper.animate-page {
+  opacity: 1;
+  transform: translateY(0);
+}
+

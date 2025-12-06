@@ -1,10 +1,19 @@
 package com.cybersecurityApp.cybersecurity_App.model.dto;
 
-public class OptionItemDTO {
+//SOLO lleva lo que el estudiante necesita ver.
+
+public class OptionItemStudentDTO {
 
     private Long id;
     private String text;
-    private boolean correct;
+
+    public OptionItemStudentDTO() {
+    }
+
+    public OptionItemStudentDTO(Long id, String text) {
+        this.id = id;
+        this.text = text;
+    }
 
     public Long getId() {
         return id;
@@ -20,13 +29,5 @@ public class OptionItemDTO {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public boolean isCorrect() {
-        return correct;
-    }
-
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
     }
 }

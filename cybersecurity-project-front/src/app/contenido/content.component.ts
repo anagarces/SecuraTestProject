@@ -21,27 +21,43 @@ export class ContentComponent  implements OnInit{
   public paginaActual: number = 1;
   public cardsPorPagina: number = 6; 
 
+
+//modal bienvenida
+showWelcomeLogin = false;
+welcomeUserName = '';
+animatePage = false;
+
+
   constructor(private contentService: ContentService){}
 
-  ngOnInit(): void {
-      
-    //obtenemos los datos una sola vez
-    this.contentService.getContenidos().subscribe(contenidosRecibidos=>{
+ ngOnInit(): void {
 
-      //guarda lista completa
-      this.todosLosContenidos = contenidosRecibidos;
+  // ========= Modal si viene del LOGIN =========
+  if(localStorage.getItem('welcome_login')){
 
-       console.log('Datos del primer contenido:', this.todosLosContenidos[0]);
+    this.welcomeUserName = localStorage.getItem('welcome_name') || 'Usuario';
+    this.showWelcomeLogin = true;
 
-      //calculamos las cards que se deben mostrar en la primera pagina
-      this.actualizarCardsVisibles();
-
-      //Dejamos de mostrar el mensaje 'cargando'
-      this.isLoading = false;
-
-    });
-
+    localStorage.removeItem('welcome_login');
   }
+
+  // ========= Efecto Fade-In al cargar contenido =========
+  setTimeout(() => this.animatePage = true, 100);
+
+  // ========= Cargar Contenido =========
+  this.contentService.getContenidos().subscribe(contenidosRecibidos=>{
+
+    this.todosLosContenidos = contenidosRecibidos;
+    this.actualizarCardsVisibles();
+    this.isLoading = false;
+
+  });
+}
+
+closeWelcomeLogin(){
+  this.showWelcomeLogin = false;
+}
+
     
 
      // --- Métodos para la paginación---

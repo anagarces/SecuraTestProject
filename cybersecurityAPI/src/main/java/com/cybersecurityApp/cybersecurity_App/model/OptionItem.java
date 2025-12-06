@@ -4,25 +4,25 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "options")
+@Table(name = "option_item")
 public class OptionItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String text;
-
-    private boolean correct;
-
-    // 🔹 NUEVO: marca lógica de borrado / archivado
-    @Column(nullable = false)
-    private boolean archived = false;
-
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     @JsonBackReference("question-options")
     private Question question;
+    private String text;
+
+    @Column(name = "is_correct")
+    private boolean correct;
+
+    @Column(nullable = false)
+    private int ord;
+
 
     // getters y setters
 
@@ -50,13 +50,6 @@ public class OptionItem {
         this.correct = correct;
     }
 
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public void setArchived(boolean archived) {
-        this.archived = archived;
-    }
 
     public Question getQuestion() {
         return question;
@@ -64,5 +57,13 @@ public class OptionItem {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public int getOrd() {
+        return ord;
+    }
+
+    public void setOrd(int ord) {
+        this.ord = ord;
     }
 }

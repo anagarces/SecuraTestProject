@@ -11,4 +11,4 @@ export interface SubmissionResponse {
   quizId?: number;          // ID del cuestionario respondido
   score: number;           // Puntuación obtenida
   totalQuestions: number;  // Total de preguntas en el quiz
-}
+} 

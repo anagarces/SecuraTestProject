@@ -1,8 +1,8 @@
 package com.cybersecurityApp.cybersecurity_App.model.dto.dtomapper;
 
 import com.cybersecurityApp.cybersecurity_App.model.Quiz;
-import com.cybersecurityApp.cybersecurity_App.model.dto.OptionItemDTO;
-import com.cybersecurityApp.cybersecurity_App.model.dto.QuestionDTO;
+import com.cybersecurityApp.cybersecurity_App.model.dto.OptionItemStudentDTO;
+import com.cybersecurityApp.cybersecurity_App.model.dto.QuestionStudentDTO;
 import com.cybersecurityApp.cybersecurity_App.model.dto.QuizDetailDTO;
 import com.cybersecurityApp.cybersecurity_App.model.dto.QuizSummaryDTO;
 import org.springframework.stereotype.Component;
@@ -19,13 +19,14 @@ public class DTOMapper {
         dto.setDescription(quiz.getDescription());
 
         if (quiz.getQuestions() != null) {
-            List<QuestionDTO> questionDTOs = quiz.getQuestions().stream().map(q -> {
-                QuestionDTO qdto = new QuestionDTO();
+            List<QuestionStudentDTO> questionDTOs = quiz.getQuestions().stream().map(q -> {
+                QuestionStudentDTO qdto = new QuestionStudentDTO();
                 qdto.setId(q.getId());
                 qdto.setText(q.getText());
+
                 if (q.getOptions() != null) {
-                    List<OptionItemDTO> optionDTOs = q.getOptions().stream().map(o -> {
-                        OptionItemDTO odto = new OptionItemDTO();
+                    List<OptionItemStudentDTO> optionDTOs = q.getOptions().stream().map(o -> {
+                        OptionItemStudentDTO odto = new OptionItemStudentDTO();
                         odto.setId(o.getId());
                         odto.setText(o.getText());
                         return odto;
@@ -34,6 +35,7 @@ public class DTOMapper {
                 }
                 return qdto;
             }).toList();
+
             dto.setQuestions(questionDTOs);
         }
 

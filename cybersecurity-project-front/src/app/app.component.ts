@@ -11,17 +11,33 @@ import {jwtDecode} from 'jwt-decode';
 export class AppComponent {
   title = 'cybersecurity-project';
   adminMenuOpen = false;
-
+isLoggingOut = false;
    constructor(public authService: AuthService, private router: Router) {
     (window as any).jwtDecode = jwtDecode;
 }
  
 
 
-   //cerrar sesion
- logout(): void {
-  this.authService.logout(); // ← esto YA limpia todo y navega
+
+logout(): void {
+  this.isLoggingOut = true;
+
+  // Animación / sensación de proceso
+  setTimeout(() => {
+
+    // Marcamos salida para mostrar mensaje al volver a login
+    localStorage.setItem('logout_msg', 'true');
+
+    this.authService.logout(); // limpia token y rol
+
+    this.router.navigate(['/login']);
+
+    // opcional si quieres quitar el loader después
+    // setTimeout(() => this.isLoggingOut = false, 300);
+
+  }, 900); // duración del efecto visual
 }
+
 
 
 toggleAdminMenu() {
