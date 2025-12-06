@@ -38,6 +38,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   backendErrors: any = {}; //errores que vienen del backend
   message = '';
+  loading = false;
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
 
@@ -58,43 +59,43 @@ export class RegisterComponent {
    }
 
 
-  onSubmit(): void {
-
-    //Si el formulario es invalido en el cliente, no enviamos la peticion
-    if(this.registerForm.invalid){
-      this.registerForm.markAllAsTouched();
-      return;
-    }
-
-    this.backendErrors = {};
-    this.message = '';
-
-    // Nota de seguridad: Al enviar el formulario al backend, solo debes incluir los campos necesarios.
-    // El 'confirmPassword' es solo para validación del cliente y se debe omitir en el envío.
-    const { confirmPassword, ...dataToSend } = this.registerForm.value;
-
-
-    //enviamos la peticion al backend
-    this.authService.register(dataToSend).subscribe({
-      next: (response: any) => {
-          this.message = response['message'];
-          setTimeout(() => this.router.navigate(['/']), 2000);
-      },
-      error: (err: any) => {
-        console.error('Error en el registro:', err);
-
-        //Si el backend devolvio errores de validacion
-        if(err.status === 400 && typeof err.error === 'object'){
-          this.backendErrors = err.error; //Ej: {email: '....' password: '...'}
-        } else{
-          this.backendErrors = {};
-          this.message = err.error?.['message'] || 'Error en el registro. Vuelve a intentarlo.';
-        }
-
-      }
-
-    });
+onSubmit(): void {
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
+    return;
   }
+
+  this.loading = true;
+  this.backendErrors = {};
+  this.message = '';
+
+  const { confirmPassword, ...dataToSend } = this.registerForm.value;
+
+  this.authService.register(dataToSend).subscribe({
+    next: (response: any) => {
+      this.message = response.message || "Registro exitoso";
+
+      // guardamos flag temporal
+      localStorage.setItem('just_registered', 'true');
+
+      // pequeña pausa visual más natural
+      setTimeout(() => {
+        this.loading = false;
+        this.router.navigate(['/']); // o '/login' si luego prefieres
+      }, 1500);
+    },
+    error: (err: any) => {
+      this.loading = false;
+
+      if (err.status === 400 && typeof err.error === 'object') {
+        this.backendErrors = err.error;
+      } else {
+        this.message = err.error?.message || 'Error en el registro. Vuelve a intentarlo.';
+      }
+    }
+  });
+}
+
 
   //Metodo de ayuda para acceder facilmente a los controles en la plantilla
   get f(){

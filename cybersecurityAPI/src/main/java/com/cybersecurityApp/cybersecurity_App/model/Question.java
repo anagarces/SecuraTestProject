@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "questions")
+@Table(name = "question")
 public class Question {
 
     @Id
@@ -22,9 +22,12 @@ public class Question {
     @JsonBackReference("quiz-questions")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true) // <--- MEJORA PRO
     @JsonManagedReference("question-options")
     private List<OptionItem> options = new ArrayList<>();
+
+    @Column(nullable = false)
+    private int ord;
 
     // getters y setters
 
@@ -58,5 +61,13 @@ public class Question {
 
     public void setOptions(List<OptionItem> options) {
         this.options = options;
+    }
+
+    public int getOrd() {
+        return ord;
+    }
+
+    public void setOrd(int ord) {
+        this.ord = ord;
     }
 }

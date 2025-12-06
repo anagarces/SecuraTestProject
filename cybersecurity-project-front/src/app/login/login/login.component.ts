@@ -5,26 +5,43 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'] // Puedes añadir estilos aquí
+  styleUrls: ['./login.component.css']
 })
 
 export class LoginComponent {
+
   credentials = { email: '', password: '' };
   error = '';
+  loading = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(): void {
+
+    if (!this.credentials.email || !this.credentials.password) return;
+
+    this.error = '';
+    this.loading = true;
+
     this.authService.login(this.credentials).subscribe({
-      next: (response) => {
-        // Si el login es exitoso, redirigimos a la página de contenidos
+      next: (response: any) => {
+
         localStorage.setItem('auth_token', response.token);
-        this.router.navigate(['/contenido']);
+
+        // Recuperamos el nombre que viene del backend (ajusta si tu API lo devuelve distinto)
+        localStorage.setItem('welcome_name', response.nombre || 'Usuario');
+        localStorage.setItem('welcome_login', 'true');
+
+        // micro pausa agradable para UX
+        setTimeout(() => {
+          this.loading = false;
+          this.router.navigate(['/contenido']); 
+        }, 900);
       },
-      error: (err) => {
-        // Si hay un error (ej. 401), mostramos un mensaje
+
+      error: () => {
+        this.loading = false;
         this.error = 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
-        console.error('Error en el login:', err);
       }
     });
   }

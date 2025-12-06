@@ -1,4 +1,7 @@
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div
+  class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 page-wrapper"
+  [ngClass]="{ 'animate-page': animatePage }"
+>
   <!---INICIO CABECERA DE CONTENIDOS (Hero Section) - Estilo Vibrante Integrado-->
   <div
     class="bg-indigo-600 dark:bg-gray-700 text-white rounded-2xl p-8 md:p-12 mb-10 shadow-2xl shadow-indigo-500/50 dark:shadow-indigo-900/50"
@@ -18,6 +21,7 @@
   <!---FIN CABECERA DE CONTENIDOS-->
 
   <!---INICIO CATALOGO DE CONTENIDOS (Grid de Tarjetas)-->
+
   <ng-container *ngIf="!isLoading; else loading">
     <!-- Estado Vacío -->
     <div
@@ -197,4 +201,29 @@
       </p>
     </div>
   </ng-template>
+
+  <!-- MODAL BIENVENIDA DESPUÉS DE LOGIN -->
+  <div
+    *ngIf="showWelcomeLogin"
+    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-50 animate-fadeIn"
+  >
+    <div
+      class="bg-white dark:bg-gray-800 w-[92%] max-w-md p-8 rounded-2xl shadow-2xl text-center animate-scaleIn border border-gray-200 dark:border-gray-700"
+    >
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        👋 ¡Bienvenido, {{ welcomeUserName }}!
+      </h2>
+
+      <p class="text-gray-600 dark:text-gray-300 mb-6">
+        Nos alegra tenerte aquí. Explora el contenido y sigue aprendiendo.
+      </p>
+
+      <button
+        (click)="closeWelcomeLogin()"
+        class="w-full py-3 text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-pink-500 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 transition-all shadow-md shadow-indigo-600/30"
+      >
+        Comenzar
+      </button>
+    </div>
+  </div>
 </div>

@@ -7,7 +7,7 @@ public class QuizDetailDTO {
     private Long id;
     private String title;
     private String description;
-    private List<QuestionDTO> questions;
+    private List<QuestionStudentDTO> questions;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class QuizDetailDTO {
         this.description = description;
     }
 
-    public List<QuestionDTO> getQuestions() {
+    public List<QuestionStudentDTO> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<QuestionDTO> questions) {
+    public void setQuestions(List<QuestionStudentDTO> questions) {
         this.questions = questions;
     }
 }
